@@ -1,4 +1,5 @@
 /** @flow */
+/* global navigator, io */
 'use strict';
 
 require('./styles.css');
@@ -6,9 +7,13 @@ require('./styles.css');
 import React from 'react';
 import {Resolver} from 'react-resolver';
 
+var socketio;
+
 class Home extends React.Component {
-  getInitialState(): ?Object {
-    return {
+
+  constructor() {
+    super();
+    this.state = {
       startButtonDisabled: true,
       stopButtonDisabled: true,
       justAudio: false,
@@ -17,18 +22,13 @@ class Home extends React.Component {
       videoStream: null,
       audioStream: null
     };
-  },
 
-  componentWillMount(): ?any {
-    var self = this;
-    var state = {};
-    state.recordVideoSeparately = !!navigator.webkitGetUserMedia;
+    this.handleStart = this.handleStart.bind(this);
+    this.handleStop = this.handleStop.bind(this);
+   }
 
-    if (!!navigator.webkitGetUserMedia && !state.recordVideoSeparately) {
-      state.justAudio = true;
-    }
-
-    this.setState(state);
+  componentDidMount(): ?any {
+    socketio = io();
 
     socketio.on('connect', () => {
       this.setState({ startButtonDisabled: false });
@@ -38,6 +38,7 @@ class Home extends React.Component {
       var href = (location.href.split('/').pop().length ? location.href.replace(location.href.split('/').pop(), '') : location.href);
       href = href + '/uploads/' + fileName;
       console.log('got file ' + href);
+      var cameraPreview = this.refs.cameraPreview.getDOMNode();
       cameraPreview.src = href
       cameraPreview.play();
       cameraPreview.muted = false;
@@ -45,6 +46,8 @@ class Home extends React.Component {
     });
 
     socketio.on('ffmpeg-output', (result) => {
+      var progressBar = this.refs.progressBar.getDOMNode();
+      var percentage = this.refs.percentage.getDOMNode();
       if (parseInt(result) >= 100) {
         progressBar.parentNode.style.display = 'none';
         return;
@@ -57,11 +60,21 @@ class Home extends React.Component {
     socketio.on('ffmpeg-error', (error) => {
       alert(error);
     });
-  },
+
+    var self = this;
+    var state = {};
+    state.recordVideoSeparately = !!navigator.webkitGetUserMedia;
+
+    if (!!navigator.webkitGetUserMedia && !state.recordVideoSeparately) {
+      state.justAudio = true;
+    }
+
+    this.setState(state);
+  }
 
   handleStart(): ?void {
     var self = this;
-    this.setState({ startButtonDisabled: true} () => {
+    this.setState({ startButtonDisabled: true}, () => {
       navigator.getUserMedia({
         audio: true,
         video: true
@@ -74,7 +87,7 @@ class Home extends React.Component {
               self.state.videoStream.startRecording();
             }
 
-            var cameraPreview = self.refs.getDOMNode();
+            var cameraPreview = self.refs.cameraPreview.getDOMNode();
             cameraPreview.src = window.URL.createObjectURL(stream);
             cameraPreview.play();
             cameraPreview.muted = true;
@@ -91,7 +104,7 @@ class Home extends React.Component {
           alert( JSON.stringify(error) );
        });
     });
-  },
+  }
 
   handleStop(): ?void {
     var state = {
@@ -103,7 +116,7 @@ class Home extends React.Component {
       var audioStream = this.state.audioStream;
       var videoStream = this.state.videoStream;
       var mediaStream = this.state.mediaStream;
-      var cameraPreview = this.refs.getDOMNode();
+      var cameraPreview = this.refs.cameraPreview.getDOMNode();
 
       // stop audio recorder
       if (this.state.recordVideoSeparately){
@@ -159,12 +172,12 @@ class Home extends React.Component {
         });
       }
     });
-  },
+  }
 
   render(): ?ReactElement {
-    var media = <video ref="camera-preview" className="CameraPreview" ></video>;
+    var media = <video ref="cameraPreview" className="CameraPreview" ></video>;
     if (this.state.justAudio) {
-      media = <audio ref="camera-preview" controls className="CameraPreview"></audio>;
+      media = <audio ref="cameraPreview" controls className="CameraPreview"></audio>;
     }
 
     return (
@@ -175,7 +188,7 @@ class Home extends React.Component {
 
         <div>
           <label ref="percentage">Ffmpeg Progress 0%</label>
-          <progress ref="progress-bar" value="0" max="100"></progress>
+          <progress ref="progressBar" value="0" max="100"></progress>
           <br />
         </div>
 

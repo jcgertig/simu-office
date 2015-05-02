@@ -1,5 +1,10 @@
-/** @define Home; use strict */
-@import 'normalize.css';
+/** @define HomeContent; use strict */
+
+.HomeContent {}
+
+.HomeContent-child {}
+
+.HomeContent-child.is-state {}
 
 .CameraPreview {
   border: 1px solid rgb(15, 158, 238);
