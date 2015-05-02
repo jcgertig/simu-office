@@ -45,9 +45,9 @@ require("source-map-support").install();
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(__dirname) {'use strict';
+	'use strict';
 	
-	var _interopRequireDefault = __webpack_require__(11)['default'];
+	var _interopRequireDefault = __webpack_require__(12)['default'];
 	
 	var _express = __webpack_require__(1);
 	
@@ -57,17 +57,17 @@ require("source-map-support").install();
 	
 	var _React2 = _interopRequireDefault(_React);
 	
-	var _Router = __webpack_require__(14);
+	var _Router = __webpack_require__(15);
 	
 	var _Router2 = _interopRequireDefault(_Router);
 	
 	var _Resolver = __webpack_require__(3);
 	
-	var _routes = __webpack_require__(12);
+	var _routes = __webpack_require__(13);
 	
 	var _routes2 = _interopRequireDefault(_routes);
 	
-	var _resources = __webpack_require__(13);
+	var _resources = __webpack_require__(14);
 	
 	var _read = __webpack_require__(4);
 	
@@ -84,9 +84,11 @@ require("source-map-support").install();
 	};
 	
 	var app = _express2['default']();
-	var server = __webpack_require__(78).Server(app);
+	var server = __webpack_require__(9).Server(app);
 	
 	app.use('/cdn', _express2['default']['static'](_join.join(process.cwd(), 'dist')));
+	
+	app.use('/public', _express2['default']['static'](_join.join(process.cwd(), 'public')));
 	
 	app.get('*', function (req, res) {
 	  var router = _Router2['default'].create({
@@ -116,64 +118,77 @@ require("source-map-support").install();
 	  debug('React-docs listening at http://%s:%s', host, port);
 	});
 	
+	// New method
+	var easyrtc = __webpack_require__(10); // EasyRTC external module
+	var io = __webpack_require__(11);
+	
+	var socketServer = io.listen(server, { 'log level': 1 });
+	
+	// Start EasyRTC server
+	var rtc = easyrtc.listen(app, socketServer);
+	
 	// Socket.IO part
-	var io = __webpack_require__(9)(server);
-	
-	io.on('connection', function (socket) {
-	  console.log('New client connected!');
-	
-	  socket.on('message', function (data) {
-	    console.log('writing to disk');
-	    writeToDisk(data.audio.dataURL, data.audio.name);
-	    writeToDisk(data.video.dataURL, data.video.name);
-	
-	    merge(socket, data.audio.name, data.video.name);
-	  });
-	});
-	
-	function writeToDisk(dataURL, fileName) {
-	  var fileExtension = fileName.split('.').pop(),
-	      fileRootNameWithBase = './uploads/' + fileName,
-	      filePath = fileRootNameWithBase,
-	      fileID = 2,
-	      fileBuffer;
-	
-	  // @todo return the new filename to client
-	  while (fs.existsSync(filePath)) {
-	    filePath = fileRootNameWithBase + '(' + fileID + ').' + fileExtension;
-	    fileID += 1;
-	  }
-	
-	  dataURL = dataURL.split(',').pop();
-	  fileBuffer = new Buffer(dataURL, 'base64');
-	  fs.writeFileSync(filePath, fileBuffer);
-	
-	  console.log('filePath', filePath);
-	}
-	
-	function merge(socket, fileName) {
-	  var FFmpeg = __webpack_require__(10);
-	
-	  var audioFile = path.join(__dirname, 'uploads', fileName + '.wav'),
-	      videoFile = path.join(__dirname, 'uploads', fileName + '.webm'),
-	      mergedFile = path.join(__dirname, 'uploads', fileName + '-merged.webm');
-	
-	  new FFmpeg({
-	    source: videoFile
-	  }).addInput(audioFile).on('error', function (err) {
-	    socket.emit('ffmpeg-error', 'ffmpeg : An error occurred: ' + err.message);
-	  }).on('progress', function (progress) {
-	    socket.emit('ffmpeg-output', Math.round(progress.percent));
-	  }).on('end', function () {
-	    socket.emit('merged', fileName + '-merged.webm');
-	    console.log('Merging finished !');
-	
-	    // removing audio/video files
-	    fs.unlink(audioFile);
-	    fs.unlink(videoFile);
-	  }).saveToFile(mergedFile);
-	}
-	/* WEBPACK VAR INJECTION */}.call(exports, "/"))
+	// var io = require('socket.io')(server);
+	//
+	// io.on('connection', function (socket) {
+	//   console.log('New client connected!');
+	//
+	//   socket.on('message', function(data) {
+	//     console.log('writing to disk');
+	//     writeToDisk(data.audio.dataURL, data.audio.name);
+	//     writeToDisk(data.video.dataURL, data.video.name);
+	//
+	//     merge(socket, data.audio.name, data.video.name);
+	//   });
+	// });
+	//
+	// function writeToDisk(dataURL, fileName) {
+	//   var fileExtension = fileName.split('.').pop(),
+	//       fileRootNameWithBase = './uploads/' + fileName,
+	//       filePath = fileRootNameWithBase,
+	//       fileID = 2,
+	//       fileBuffer;
+	//
+	//   // @todo return the new filename to client
+	//   while (fs.existsSync(filePath)) {
+	//     filePath = fileRootNameWithBase + '(' + fileID + ').' + fileExtension;
+	//     fileID += 1;
+	//   }
+	//
+	//   dataURL = dataURL.split(',').pop();
+	//   fileBuffer = new Buffer(dataURL, 'base64');
+	//   fs.writeFileSync(filePath, fileBuffer);
+	//
+	//   console.log('filePath', filePath);
+	// }
+	//
+	// function merge(socket, fileName) {
+	//   var FFmpeg = require('fluent-ffmpeg');
+	//
+	//   var audioFile = path.join(__dirname, 'uploads', fileName + '.wav'),
+	//       videoFile = path.join(__dirname, 'uploads', fileName + '.webm'),
+	//       mergedFile = path.join(__dirname, 'uploads', fileName + '-merged.webm');
+	//
+	//   new FFmpeg({
+	//         source: videoFile
+	//       })
+	//       .addInput(audioFile)
+	//       .on('error', function (err) {
+	//         socket.emit('ffmpeg-error', 'ffmpeg : An error occurred: ' + err.message);
+	//       })
+	//       .on('progress', function (progress) {
+	//         socket.emit('ffmpeg-output', Math.round(progress.percent));
+	//       })
+	//       .on('end', function () {
+	//         socket.emit('merged', fileName + '-merged.webm');
+	//         console.log('Merging finished !');
+	//
+	//         // removing audio/video files
+	//         fs.unlink(audioFile);
+	//         fs.unlink(videoFile);
+	//       })
+	//       .saveToFile(mergedFile);
+	// }
 
 /***/ },
 /* 1 */
@@ -227,16 +242,22 @@ require("source-map-support").install();
 /* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = require("socket.io");
+	module.exports = require("http");
 
 /***/ },
 /* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = require("fluent-ffmpeg");
+	module.exports = require("easyrtc");
 
 /***/ },
 /* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = require("socket.io");
+
+/***/ },
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -250,14 +271,14 @@ require("source-map-support").install();
 	exports.__esModule = true;
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var _Object$defineProperty = __webpack_require__(15)['default'];
+	var _Object$defineProperty = __webpack_require__(16)['default'];
 	
-	var _interopRequireDefault = __webpack_require__(11)['default'];
+	var _interopRequireDefault = __webpack_require__(12)['default'];
 	
 	_Object$defineProperty(exports, '__esModule', {
 	  value: true
@@ -269,19 +290,19 @@ require("source-map-support").install();
 	
 	var _React2 = _interopRequireDefault(_React);
 	
-	var _Router = __webpack_require__(14);
+	var _Router = __webpack_require__(15);
 	
 	var _Router2 = _interopRequireDefault(_Router);
 	
-	var _App = __webpack_require__(16);
+	var _App = __webpack_require__(17);
 	
 	var _App2 = _interopRequireDefault(_App);
 	
-	var _Home = __webpack_require__(17);
+	var _Home = __webpack_require__(18);
 	
 	var _Home2 = _interopRequireDefault(_Home);
 	
-	var _NotFound = __webpack_require__(18);
+	var _NotFound = __webpack_require__(19);
 	
 	var _NotFound2 = _interopRequireDefault(_NotFound);
 	
@@ -300,12 +321,12 @@ require("source-map-support").install();
 	module.exports = exports['default'];
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var _Object$defineProperty = __webpack_require__(15)['default'];
+	var _Object$defineProperty = __webpack_require__(16)['default'];
 	
 	_Object$defineProperty(exports, '__esModule', {
 	  value: true
@@ -324,60 +345,60 @@ require("source-map-support").install();
 	exports.resources = resources;
 
 /***/ },
-/* 14 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	exports.DefaultRoute = __webpack_require__(19);
-	exports.Link = __webpack_require__(20);
-	exports.NotFoundRoute = __webpack_require__(21);
-	exports.Redirect = __webpack_require__(22);
-	exports.Route = __webpack_require__(23);
-	exports.RouteHandler = __webpack_require__(24);
+	exports.DefaultRoute = __webpack_require__(20);
+	exports.Link = __webpack_require__(21);
+	exports.NotFoundRoute = __webpack_require__(22);
+	exports.Redirect = __webpack_require__(23);
+	exports.Route = __webpack_require__(24);
+	exports.RouteHandler = __webpack_require__(25);
 	
-	exports.HashLocation = __webpack_require__(25);
-	exports.HistoryLocation = __webpack_require__(26);
-	exports.RefreshLocation = __webpack_require__(27);
-	exports.StaticLocation = __webpack_require__(28);
-	exports.TestLocation = __webpack_require__(29);
+	exports.HashLocation = __webpack_require__(26);
+	exports.HistoryLocation = __webpack_require__(27);
+	exports.RefreshLocation = __webpack_require__(28);
+	exports.StaticLocation = __webpack_require__(29);
+	exports.TestLocation = __webpack_require__(30);
 	
-	exports.ImitateBrowserBehavior = __webpack_require__(30);
-	exports.ScrollToTopBehavior = __webpack_require__(31);
+	exports.ImitateBrowserBehavior = __webpack_require__(31);
+	exports.ScrollToTopBehavior = __webpack_require__(32);
 	
-	exports.History = __webpack_require__(32);
-	exports.Navigation = __webpack_require__(33);
-	exports.State = __webpack_require__(34);
+	exports.History = __webpack_require__(33);
+	exports.Navigation = __webpack_require__(34);
+	exports.State = __webpack_require__(35);
 	
-	exports.createRoute = __webpack_require__(35).createRoute;
-	exports.createDefaultRoute = __webpack_require__(35).createDefaultRoute;
-	exports.createNotFoundRoute = __webpack_require__(35).createNotFoundRoute;
-	exports.createRedirect = __webpack_require__(35).createRedirect;
-	exports.createRoutesFromReactChildren = __webpack_require__(36);
-	exports.create = __webpack_require__(37);
-	exports.run = __webpack_require__(38);
-
-/***/ },
-/* 15 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = { "default": __webpack_require__(43), __esModule: true };
+	exports.createRoute = __webpack_require__(36).createRoute;
+	exports.createDefaultRoute = __webpack_require__(36).createDefaultRoute;
+	exports.createNotFoundRoute = __webpack_require__(36).createNotFoundRoute;
+	exports.createRedirect = __webpack_require__(36).createRedirect;
+	exports.createRoutesFromReactChildren = __webpack_require__(37);
+	exports.create = __webpack_require__(38);
+	exports.run = __webpack_require__(39);
 
 /***/ },
 /* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
+	module.exports = { "default": __webpack_require__(44), __esModule: true };
+
+/***/ },
+/* 17 */
+/***/ function(module, exports, __webpack_require__) {
+
 	'use strict';
 	
-	var _inherits = __webpack_require__(39)['default'];
+	var _inherits = __webpack_require__(40)['default'];
 	
-	var _createClass = __webpack_require__(40)['default'];
+	var _createClass = __webpack_require__(41)['default'];
 	
-	var _classCallCheck = __webpack_require__(41)['default'];
+	var _classCallCheck = __webpack_require__(42)['default'];
 	
-	var _Object$defineProperty = __webpack_require__(15)['default'];
+	var _Object$defineProperty = __webpack_require__(16)['default'];
 	
-	var _interopRequireDefault = __webpack_require__(11)['default'];
+	var _interopRequireDefault = __webpack_require__(12)['default'];
 	
 	_Object$defineProperty(exports, '__esModule', {
 	  value: true
@@ -387,12 +408,12 @@ require("source-map-support").install();
 	
 	var _React2 = _interopRequireDefault(_React);
 	
-	var _RouteHandler = __webpack_require__(14);
+	var _RouteHandler = __webpack_require__(15);
 	
 	/** @flow */
 	'use strict';
 	
-	__webpack_require__(57);
+	__webpack_require__(45);
 	
 	var AppBase = (function (_React$Component) {
 	  function AppBase() {
@@ -423,22 +444,22 @@ require("source-map-support").install();
 	module.exports = exports['default'];
 
 /***/ },
-/* 17 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var _inherits = __webpack_require__(39)['default'];
+	var _inherits = __webpack_require__(40)['default'];
 	
-	var _get = __webpack_require__(42)['default'];
+	var _get = __webpack_require__(43)['default'];
 	
-	var _createClass = __webpack_require__(40)['default'];
+	var _createClass = __webpack_require__(41)['default'];
 	
-	var _classCallCheck = __webpack_require__(41)['default'];
+	var _classCallCheck = __webpack_require__(42)['default'];
 	
-	var _Object$defineProperty = __webpack_require__(15)['default'];
+	var _Object$defineProperty = __webpack_require__(16)['default'];
 	
-	var _interopRequireDefault = __webpack_require__(11)['default'];
+	var _interopRequireDefault = __webpack_require__(12)['default'];
 	
 	_Object$defineProperty(exports, '__esModule', {
 	  value: true
@@ -454,7 +475,7 @@ require("source-map-support").install();
 	/* global navigator, io */
 	'use strict';
 	
-	__webpack_require__(57);
+	__webpack_require__(45);
 	
 	var socketio;
 	
@@ -698,20 +719,20 @@ require("source-map-support").install();
 	*/
 
 /***/ },
-/* 18 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var _inherits = __webpack_require__(39)['default'];
+	var _inherits = __webpack_require__(40)['default'];
 	
-	var _createClass = __webpack_require__(40)['default'];
+	var _createClass = __webpack_require__(41)['default'];
 	
-	var _classCallCheck = __webpack_require__(41)['default'];
+	var _classCallCheck = __webpack_require__(42)['default'];
 	
-	var _Object$defineProperty = __webpack_require__(15)['default'];
+	var _Object$defineProperty = __webpack_require__(16)['default'];
 	
-	var _interopRequireDefault = __webpack_require__(11)['default'];
+	var _interopRequireDefault = __webpack_require__(12)['default'];
 	
 	_Object$defineProperty(exports, '__esModule', {
 	  value: true
@@ -721,12 +742,12 @@ require("source-map-support").install();
 	
 	var _React2 = _interopRequireDefault(_React);
 	
-	var _RouteHandler = __webpack_require__(14);
+	var _RouteHandler = __webpack_require__(15);
 	
 	/** @flow */
 	'use strict';
 	
-	__webpack_require__(57);
+	__webpack_require__(45);
 	
 	var NotFound = (function (_React$Component) {
 	  function NotFound() {
@@ -758,12 +779,12 @@ require("source-map-support").install();
 	module.exports = exports['default'];
 
 /***/ },
-/* 19 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var _Object$create = __webpack_require__(45)["default"];
+	var _Object$create = __webpack_require__(46)["default"];
 	
 	var _inherits = function _inherits(subClass, superClass) {
 	  if (typeof superClass !== "function" && superClass !== null) {
@@ -777,9 +798,9 @@ require("source-map-support").install();
 	  }
 	};
 	
-	var PropTypes = __webpack_require__(46);
-	var RouteHandler = __webpack_require__(24);
-	var Route = __webpack_require__(23);
+	var PropTypes = __webpack_require__(47);
+	var RouteHandler = __webpack_require__(25);
+	var Route = __webpack_require__(24);
 	
 	/**
 	 * A <DefaultRoute> component is a special kind of <Route> that
@@ -820,14 +841,14 @@ require("source-map-support").install();
 	module.exports = DefaultRoute;
 
 /***/ },
-/* 20 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var _Object$defineProperties = __webpack_require__(44)["default"];
+	var _Object$defineProperties = __webpack_require__(48)["default"];
 	
-	var _Object$create = __webpack_require__(45)["default"];
+	var _Object$create = __webpack_require__(46)["default"];
 	
 	var _createClass = (function () {
 	  function defineProperties(target, props) {
@@ -852,8 +873,8 @@ require("source-map-support").install();
 	};
 	
 	var React = __webpack_require__(2);
-	var assign = __webpack_require__(58);
-	var PropTypes = __webpack_require__(46);
+	var assign = __webpack_require__(60);
+	var PropTypes = __webpack_require__(47);
 	
 	function isLeftClickEvent(event) {
 	  return event.button === 0;
@@ -983,12 +1004,12 @@ require("source-map-support").install();
 	module.exports = Link;
 
 /***/ },
-/* 21 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var _Object$create = __webpack_require__(45)["default"];
+	var _Object$create = __webpack_require__(46)["default"];
 	
 	var _inherits = function _inherits(subClass, superClass) {
 	  if (typeof superClass !== "function" && superClass !== null) {
@@ -1002,9 +1023,9 @@ require("source-map-support").install();
 	  }
 	};
 	
-	var PropTypes = __webpack_require__(46);
-	var RouteHandler = __webpack_require__(24);
-	var Route = __webpack_require__(23);
+	var PropTypes = __webpack_require__(47);
+	var RouteHandler = __webpack_require__(25);
+	var Route = __webpack_require__(24);
 	
 	/**
 	 * A <NotFoundRoute> is a special kind of <Route> that
@@ -1046,12 +1067,12 @@ require("source-map-support").install();
 	module.exports = NotFoundRoute;
 
 /***/ },
-/* 22 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var _Object$create = __webpack_require__(45)["default"];
+	var _Object$create = __webpack_require__(46)["default"];
 	
 	var _inherits = function _inherits(subClass, superClass) {
 	  if (typeof superClass !== "function" && superClass !== null) {
@@ -1065,8 +1086,8 @@ require("source-map-support").install();
 	  }
 	};
 	
-	var PropTypes = __webpack_require__(46);
-	var Route = __webpack_require__(23);
+	var PropTypes = __webpack_require__(47);
+	var Route = __webpack_require__(24);
 	
 	/**
 	 * A <Redirect> component is a special kind of <Route> that always
@@ -1104,14 +1125,14 @@ require("source-map-support").install();
 	module.exports = Redirect;
 
 /***/ },
-/* 23 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var _Object$defineProperties = __webpack_require__(44)["default"];
+	var _Object$defineProperties = __webpack_require__(48)["default"];
 	
-	var _Object$create = __webpack_require__(45)["default"];
+	var _Object$create = __webpack_require__(46)["default"];
 	
 	var _createClass = (function () {
 	  function defineProperties(target, props) {
@@ -1136,9 +1157,9 @@ require("source-map-support").install();
 	};
 	
 	var React = __webpack_require__(2);
-	var invariant = __webpack_require__(59);
-	var PropTypes = __webpack_require__(46);
-	var RouteHandler = __webpack_require__(24);
+	var invariant = __webpack_require__(61);
+	var PropTypes = __webpack_require__(47);
+	var RouteHandler = __webpack_require__(25);
 	
 	/**
 	 * <Route> components specify components that are rendered to the page when the
@@ -1221,14 +1242,14 @@ require("source-map-support").install();
 	module.exports = Route;
 
 /***/ },
-/* 24 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var _Object$defineProperties = __webpack_require__(44)["default"];
+	var _Object$defineProperties = __webpack_require__(48)["default"];
 	
-	var _Object$create = __webpack_require__(45)["default"];
+	var _Object$create = __webpack_require__(46)["default"];
 	
 	var _createClass = (function () {
 	  function defineProperties(target, props) {
@@ -1253,9 +1274,9 @@ require("source-map-support").install();
 	};
 	
 	var React = __webpack_require__(2);
-	var ContextWrapper = __webpack_require__(47);
-	var assign = __webpack_require__(58);
-	var PropTypes = __webpack_require__(46);
+	var ContextWrapper = __webpack_require__(49);
+	var assign = __webpack_require__(60);
+	var PropTypes = __webpack_require__(47);
 	
 	var REF_NAME = "__routeHandler__";
 	
@@ -1342,13 +1363,13 @@ require("source-map-support").install();
 	module.exports = RouteHandler;
 
 /***/ },
-/* 25 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var LocationActions = __webpack_require__(48);
-	var History = __webpack_require__(32);
+	var LocationActions = __webpack_require__(50);
+	var History = __webpack_require__(33);
 	
 	var _listeners = [];
 	var _isListening = false;
@@ -1458,13 +1479,13 @@ require("source-map-support").install();
 	module.exports = HashLocation;
 
 /***/ },
-/* 26 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var LocationActions = __webpack_require__(48);
-	var History = __webpack_require__(32);
+	var LocationActions = __webpack_require__(50);
+	var History = __webpack_require__(33);
 	
 	var _listeners = [];
 	var _isListening = false;
@@ -1549,13 +1570,13 @@ require("source-map-support").install();
 	module.exports = HistoryLocation;
 
 /***/ },
-/* 27 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var HistoryLocation = __webpack_require__(26);
-	var History = __webpack_require__(32);
+	var HistoryLocation = __webpack_require__(27);
+	var History = __webpack_require__(33);
 	
 	/**
 	 * A Location that uses full page refreshes. This is used as
@@ -1585,12 +1606,12 @@ require("source-map-support").install();
 	module.exports = RefreshLocation;
 
 /***/ },
-/* 28 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var _Object$defineProperties = __webpack_require__(44)["default"];
+	var _Object$defineProperties = __webpack_require__(48)["default"];
 	
 	var _createClass = (function () {
 	  function defineProperties(target, props) {
@@ -1608,7 +1629,7 @@ require("source-map-support").install();
 	  }
 	};
 	
-	var invariant = __webpack_require__(59);
+	var invariant = __webpack_require__(61);
 	
 	function throwCannotModify() {
 	  invariant(false, "You cannot modify a static location");
@@ -1654,12 +1675,12 @@ require("source-map-support").install();
 	module.exports = StaticLocation;
 
 /***/ },
-/* 29 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var _Object$defineProperties = __webpack_require__(44)["default"];
+	var _Object$defineProperties = __webpack_require__(48)["default"];
 	
 	var _createClass = (function () {
 	  function defineProperties(target, props) {
@@ -1677,9 +1698,9 @@ require("source-map-support").install();
 	  }
 	};
 	
-	var invariant = __webpack_require__(59);
-	var LocationActions = __webpack_require__(48);
-	var History = __webpack_require__(32);
+	var invariant = __webpack_require__(61);
+	var LocationActions = __webpack_require__(50);
+	var History = __webpack_require__(33);
 	
 	/**
 	 * A location that is convenient for testing and does not require a DOM.
@@ -1768,12 +1789,12 @@ require("source-map-support").install();
 	module.exports = TestLocation;
 
 /***/ },
-/* 30 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var LocationActions = __webpack_require__(48);
+	var LocationActions = __webpack_require__(50);
 	
 	/**
 	 * A scroll behavior that attempts to imitate the default behavior
@@ -1802,7 +1823,7 @@ require("source-map-support").install();
 	module.exports = ImitateBrowserBehavior;
 
 /***/ },
-/* 31 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1822,13 +1843,13 @@ require("source-map-support").install();
 	module.exports = ScrollToTopBehavior;
 
 /***/ },
-/* 32 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var invariant = __webpack_require__(59);
-	var canUseDOM = __webpack_require__(60).canUseDOM;
+	var invariant = __webpack_require__(61);
+	var canUseDOM = __webpack_require__(62).canUseDOM;
 	
 	var History = {
 	
@@ -1857,13 +1878,13 @@ require("source-map-support").install();
 	module.exports = History;
 
 /***/ },
-/* 33 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var warning = __webpack_require__(61);
-	var PropTypes = __webpack_require__(46);
+	var warning = __webpack_require__(63);
+	var PropTypes = __webpack_require__(47);
 	
 	function deprecatedMethod(routerMethodName, fn) {
 	  return function () {
@@ -1941,13 +1962,13 @@ require("source-map-support").install();
 	module.exports = Navigation;
 
 /***/ },
-/* 34 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var warning = __webpack_require__(61);
-	var PropTypes = __webpack_require__(46);
+	var warning = __webpack_require__(63);
+	var PropTypes = __webpack_require__(47);
 	
 	function deprecatedMethod(routerMethodName, fn) {
 	  return function () {
@@ -2029,12 +2050,12 @@ require("source-map-support").install();
 	module.exports = State;
 
 /***/ },
-/* 35 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var _Object$defineProperties = __webpack_require__(44)["default"];
+	var _Object$defineProperties = __webpack_require__(48)["default"];
 	
 	var _createClass = (function () {
 	  function defineProperties(target, props) {
@@ -2052,10 +2073,10 @@ require("source-map-support").install();
 	  }
 	};
 	
-	var assign = __webpack_require__(58);
-	var invariant = __webpack_require__(59);
-	var warning = __webpack_require__(61);
-	var PathUtils = __webpack_require__(49);
+	var assign = __webpack_require__(60);
+	var invariant = __webpack_require__(61);
+	var warning = __webpack_require__(63);
+	var PathUtils = __webpack_require__(51);
 	
 	var _currentRoute;
 	
@@ -2255,19 +2276,19 @@ require("source-map-support").install();
 	module.exports = Route;
 
 /***/ },
-/* 36 */
+/* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	/* jshint -W084 */
 	var React = __webpack_require__(2);
-	var assign = __webpack_require__(58);
-	var warning = __webpack_require__(61);
-	var DefaultRoute = __webpack_require__(19);
-	var NotFoundRoute = __webpack_require__(21);
-	var Redirect = __webpack_require__(22);
-	var Route = __webpack_require__(35);
+	var assign = __webpack_require__(60);
+	var warning = __webpack_require__(63);
+	var DefaultRoute = __webpack_require__(20);
+	var NotFoundRoute = __webpack_require__(22);
+	var Redirect = __webpack_require__(23);
+	var Route = __webpack_require__(36);
 	
 	function checkPropTypes(componentName, propTypes, props) {
 	  componentName = componentName || "UnknownComponent";
@@ -2341,34 +2362,34 @@ require("source-map-support").install();
 	module.exports = createRoutesFromReactChildren;
 
 /***/ },
-/* 37 */
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	/* jshint -W058 */
 	var React = __webpack_require__(2);
-	var warning = __webpack_require__(61);
-	var invariant = __webpack_require__(59);
-	var canUseDOM = __webpack_require__(60).canUseDOM;
-	var LocationActions = __webpack_require__(48);
-	var ImitateBrowserBehavior = __webpack_require__(30);
-	var HashLocation = __webpack_require__(25);
-	var HistoryLocation = __webpack_require__(26);
-	var RefreshLocation = __webpack_require__(27);
-	var StaticLocation = __webpack_require__(28);
-	var ScrollHistory = __webpack_require__(50);
-	var createRoutesFromReactChildren = __webpack_require__(36);
-	var isReactChildren = __webpack_require__(51);
-	var Transition = __webpack_require__(52);
-	var PropTypes = __webpack_require__(46);
-	var Redirect = __webpack_require__(53);
-	var History = __webpack_require__(32);
-	var Cancellation = __webpack_require__(54);
-	var Match = __webpack_require__(55);
-	var Route = __webpack_require__(35);
-	var supportsHistory = __webpack_require__(56);
-	var PathUtils = __webpack_require__(49);
+	var warning = __webpack_require__(63);
+	var invariant = __webpack_require__(61);
+	var canUseDOM = __webpack_require__(62).canUseDOM;
+	var LocationActions = __webpack_require__(50);
+	var ImitateBrowserBehavior = __webpack_require__(31);
+	var HashLocation = __webpack_require__(26);
+	var HistoryLocation = __webpack_require__(27);
+	var RefreshLocation = __webpack_require__(28);
+	var StaticLocation = __webpack_require__(29);
+	var ScrollHistory = __webpack_require__(52);
+	var createRoutesFromReactChildren = __webpack_require__(37);
+	var isReactChildren = __webpack_require__(53);
+	var Transition = __webpack_require__(54);
+	var PropTypes = __webpack_require__(47);
+	var Redirect = __webpack_require__(55);
+	var History = __webpack_require__(33);
+	var Cancellation = __webpack_require__(56);
+	var Match = __webpack_require__(57);
+	var Route = __webpack_require__(36);
+	var supportsHistory = __webpack_require__(58);
+	var PathUtils = __webpack_require__(51);
 	
 	/**
 	 * The default location for new routers.
@@ -2860,12 +2881,12 @@ require("source-map-support").install();
 	module.exports = createRouter;
 
 /***/ },
-/* 38 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var createRouter = __webpack_require__(37);
+	var createRouter = __webpack_require__(38);
 	
 	/**
 	 * A high-level convenience method that creates, configures, and
@@ -2915,12 +2936,12 @@ require("source-map-support").install();
 	module.exports = runRouter;
 
 /***/ },
-/* 39 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var _Object$create = __webpack_require__(45)["default"];
+	var _Object$create = __webpack_require__(46)["default"];
 	
 	exports["default"] = function (subClass, superClass) {
 	  if (typeof superClass !== "function" && superClass !== null) {
@@ -2941,12 +2962,12 @@ require("source-map-support").install();
 	exports.__esModule = true;
 
 /***/ },
-/* 40 */
+/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var _Object$defineProperty = __webpack_require__(15)["default"];
+	var _Object$defineProperty = __webpack_require__(16)["default"];
 	
 	exports["default"] = (function () {
 	  function defineProperties(target, props) {
@@ -2970,7 +2991,7 @@ require("source-map-support").install();
 	exports.__esModule = true;
 
 /***/ },
-/* 41 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -2984,12 +3005,12 @@ require("source-map-support").install();
 	exports.__esModule = true;
 
 /***/ },
-/* 42 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var _Object$getOwnPropertyDescriptor = __webpack_require__(62)["default"];
+	var _Object$getOwnPropertyDescriptor = __webpack_require__(59)["default"];
 	
 	exports["default"] = function get(_x, _x2, _x3) {
 	  var _again = true;
@@ -3032,35 +3053,38 @@ require("source-map-support").install();
 	exports.__esModule = true;
 
 /***/ },
-/* 43 */
+/* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var $ = __webpack_require__(63);
+	var $ = __webpack_require__(64);
 	module.exports = function defineProperty(it, key, desc){
 	  return $.setDesc(it, key, desc);
 	};
 
 /***/ },
-/* 44 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = { "default": __webpack_require__(64), __esModule: true };
-
-/***/ },
 /* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(65), __esModule: true };
+	(function(exports) {
+	  exports.noop = function(){};
+	})(typeof module === 'object' && typeof module.exports === 'object' ? module.exports : window);
+
 
 /***/ },
 /* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
+	module.exports = { "default": __webpack_require__(65), __esModule: true };
+
+/***/ },
+/* 47 */
+/***/ function(module, exports, __webpack_require__) {
+
 	"use strict";
 	
-	var assign = __webpack_require__(58);
+	var assign = __webpack_require__(60);
 	var ReactPropTypes = __webpack_require__(2).PropTypes;
-	var Route = __webpack_require__(35);
+	var Route = __webpack_require__(36);
 	
 	var PropTypes = assign({}, ReactPropTypes, {
 	
@@ -3089,14 +3113,20 @@ require("source-map-support").install();
 	module.exports = PropTypes;
 
 /***/ },
-/* 47 */
+/* 48 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(66), __esModule: true };
+
+/***/ },
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var _Object$defineProperties = __webpack_require__(44)["default"];
+	var _Object$defineProperties = __webpack_require__(48)["default"];
 	
-	var _Object$create = __webpack_require__(45)["default"];
+	var _Object$create = __webpack_require__(46)["default"];
 	
 	var _createClass = (function () {
 	  function defineProperties(target, props) {
@@ -3153,7 +3183,7 @@ require("source-map-support").install();
 	module.exports = ContextWrapper;
 
 /***/ },
-/* 48 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -3183,14 +3213,14 @@ require("source-map-support").install();
 	module.exports = LocationActions;
 
 /***/ },
-/* 49 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var invariant = __webpack_require__(59);
-	var objectAssign = __webpack_require__(68);
-	var qs = __webpack_require__(69);
+	var invariant = __webpack_require__(61);
+	var objectAssign = __webpack_require__(71);
+	var qs = __webpack_require__(72);
 	
 	var paramCompileMatcher = /:([a-zA-Z_$][a-zA-Z0-9_$]*)|[*.()\[\]\\+|{}^$]/g;
 	var paramInjectMatcher = /:([a-zA-Z_$][a-zA-Z0-9_$?]*[?]?)|[*]/g;
@@ -3341,14 +3371,14 @@ require("source-map-support").install();
 	module.exports = PathUtils;
 
 /***/ },
-/* 50 */
+/* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var invariant = __webpack_require__(59);
-	var canUseDOM = __webpack_require__(60).canUseDOM;
-	var getWindowScrollPosition = __webpack_require__(66);
+	var invariant = __webpack_require__(61);
+	var canUseDOM = __webpack_require__(62).canUseDOM;
+	var getWindowScrollPosition = __webpack_require__(67);
 	
 	function shouldUpdateScroll(state, prevState) {
 	  if (!prevState) {
@@ -3421,7 +3451,7 @@ require("source-map-support").install();
 	module.exports = ScrollHistory;
 
 /***/ },
-/* 51 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -3439,15 +3469,15 @@ require("source-map-support").install();
 	module.exports = isReactChildren;
 
 /***/ },
-/* 52 */
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	/* jshint -W058 */
 	
-	var Cancellation = __webpack_require__(54);
-	var Redirect = __webpack_require__(53);
+	var Cancellation = __webpack_require__(56);
+	var Redirect = __webpack_require__(55);
 	
 	/**
 	 * Encapsulates a transition to a given path.
@@ -3519,7 +3549,7 @@ require("source-map-support").install();
 	module.exports = Transition;
 
 /***/ },
-/* 53 */
+/* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -3536,7 +3566,7 @@ require("source-map-support").install();
 	module.exports = Redirect;
 
 /***/ },
-/* 54 */
+/* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -3550,12 +3580,12 @@ require("source-map-support").install();
 	module.exports = Cancellation;
 
 /***/ },
-/* 55 */
+/* 57 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var _Object$defineProperties = __webpack_require__(44)["default"];
+	var _Object$defineProperties = __webpack_require__(48)["default"];
 	
 	var _createClass = (function () {
 	  function defineProperties(target, props) {
@@ -3574,7 +3604,7 @@ require("source-map-support").install();
 	};
 	
 	/* jshint -W084 */
-	var PathUtils = __webpack_require__(49);
+	var PathUtils = __webpack_require__(51);
 	
 	function deepSearch(route, pathname, query) {
 	  // Check the subtree first to find the most deeply-nested match.
@@ -3646,7 +3676,7 @@ require("source-map-support").install();
 	module.exports = Match;
 
 /***/ },
-/* 56 */
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -3667,16 +3697,13 @@ require("source-map-support").install();
 	module.exports = supportsHistory;
 
 /***/ },
-/* 57 */
+/* 59 */
 /***/ function(module, exports, __webpack_require__) {
 
-	(function(exports) {
-	  exports.noop = function(){};
-	})(typeof module === 'object' && typeof module.exports === 'object' ? module.exports : window);
-
+	module.exports = { "default": __webpack_require__(68), __esModule: true };
 
 /***/ },
-/* 58 */
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -3729,7 +3756,7 @@ require("source-map-support").install();
 
 
 /***/ },
-/* 59 */
+/* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -3788,7 +3815,7 @@ require("source-map-support").install();
 
 
 /***/ },
-/* 60 */
+/* 62 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -3836,7 +3863,7 @@ require("source-map-support").install();
 
 
 /***/ },
-/* 61 */
+/* 63 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -3852,7 +3879,7 @@ require("source-map-support").install();
 	
 	"use strict";
 	
-	var emptyFunction = __webpack_require__(67);
+	var emptyFunction = __webpack_require__(69);
 	
 	/**
 	 * Similar to invariant but only logs a warning if the condition is not met.
@@ -3901,13 +3928,7 @@ require("source-map-support").install();
 
 
 /***/ },
-/* 62 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = { "default": __webpack_require__(70), __esModule: true };
-
-/***/ },
-/* 63 */
+/* 64 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3959,7 +3980,7 @@ require("source-map-support").install();
 	  return it;
 	}
 	
-	var $ = module.exports = __webpack_require__(71)({
+	var $ = module.exports = __webpack_require__(70)({
 	  g: global,
 	  core: core,
 	  html: global.document && document.documentElement,
@@ -4015,19 +4036,10 @@ require("source-map-support").install();
 	if(typeof __g != 'undefined')__g = global;
 
 /***/ },
-/* 64 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var $ = __webpack_require__(63);
-	module.exports = function defineProperties(T, D){
-	  return $.setDescs(T, D);
-	};
-
-/***/ },
 /* 65 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var $ = __webpack_require__(63);
+	var $ = __webpack_require__(64);
 	module.exports = function create(P, D){
 	  return $.create(P, D);
 	};
@@ -4036,10 +4048,19 @@ require("source-map-support").install();
 /* 66 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var $ = __webpack_require__(64);
+	module.exports = function defineProperties(T, D){
+	  return $.setDescs(T, D);
+	};
+
+/***/ },
+/* 67 */
+/***/ function(module, exports, __webpack_require__) {
+
 	"use strict";
 	
-	var invariant = __webpack_require__(59);
-	var canUseDOM = __webpack_require__(60).canUseDOM;
+	var invariant = __webpack_require__(61);
+	var canUseDOM = __webpack_require__(62).canUseDOM;
 	
 	/**
 	 * Returns the current scroll position of the window as { x, y }.
@@ -4056,7 +4077,17 @@ require("source-map-support").install();
 	module.exports = getWindowScrollPosition;
 
 /***/ },
-/* 67 */
+/* 68 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var $ = __webpack_require__(64);
+	__webpack_require__(73);
+	module.exports = function getOwnPropertyDescriptor(it, key){
+	  return $.getDesc(it, key);
+	};
+
+/***/ },
+/* 69 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -4094,7 +4125,17 @@ require("source-map-support").install();
 
 
 /***/ },
-/* 68 */
+/* 70 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function($){
+	  $.FW   = false;
+	  $.path = $.core;
+	  return $;
+	};
+
+/***/ },
+/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4126,38 +4167,18 @@ require("source-map-support").install();
 
 
 /***/ },
-/* 69 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__(73);
-
-
-/***/ },
-/* 70 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var $ = __webpack_require__(63);
-	__webpack_require__(72);
-	module.exports = function getOwnPropertyDescriptor(it, key){
-	  return $.getDesc(it, key);
-	};
-
-/***/ },
-/* 71 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = function($){
-	  $.FW   = false;
-	  $.path = $.core;
-	  return $;
-	};
-
-/***/ },
 /* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var $        = __webpack_require__(63)
-	  , $def     = __webpack_require__(74)
+	module.exports = __webpack_require__(74);
+
+
+/***/ },
+/* 73 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var $        = __webpack_require__(64)
+	  , $def     = __webpack_require__(75)
 	  , isObject = $.isObject
 	  , toObject = $.toObject;
 	function wrapObjectMethod(METHOD, MODE){
@@ -4196,13 +4217,13 @@ require("source-map-support").install();
 	wrapObjectMethod('getOwnPropertyNames');
 
 /***/ },
-/* 73 */
+/* 74 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Load modules
 	
-	var Stringify = __webpack_require__(75);
-	var Parse = __webpack_require__(76);
+	var Stringify = __webpack_require__(76);
+	var Parse = __webpack_require__(77);
 	
 	
 	// Declare internals
@@ -4217,10 +4238,10 @@ require("source-map-support").install();
 
 
 /***/ },
-/* 74 */
+/* 75 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var $          = __webpack_require__(63)
+	var $          = __webpack_require__(64)
 	  , global     = $.g
 	  , core       = $.core
 	  , isFunction = $.isFunction;
@@ -4268,12 +4289,12 @@ require("source-map-support").install();
 	module.exports = $def;
 
 /***/ },
-/* 75 */
+/* 76 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Load modules
 	
-	var Utils = __webpack_require__(77);
+	var Utils = __webpack_require__(78);
 	
 	
 	// Declare internals
@@ -4371,12 +4392,12 @@ require("source-map-support").install();
 
 
 /***/ },
-/* 76 */
+/* 77 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Load modules
 	
-	var Utils = __webpack_require__(77);
+	var Utils = __webpack_require__(78);
 	
 	
 	// Declare internals
@@ -4538,7 +4559,7 @@ require("source-map-support").install();
 
 
 /***/ },
-/* 77 */
+/* 78 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Load modules
@@ -4674,12 +4695,6 @@ require("source-map-support").install();
 	        obj.constructor.isBuffer(obj));
 	};
 
-
-/***/ },
-/* 78 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = require("http");
 
 /***/ }
 /******/ ]);
