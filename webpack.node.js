@@ -1,6 +1,6 @@
 
 module.exports = require('./scripts/webpack.base')({
-  env: 'development',
+  env: 'production',
   target: 'node',
   serverPort: 4000,
 });
