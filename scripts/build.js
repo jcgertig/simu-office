@@ -15,7 +15,7 @@ webpack(
   baseConfig({
     cdn: process.env.CDN_LOCATION,
     hotloader: false,
-    env: 'production',
+    env: 'development',
     target: 'web',
   })
 )
@@ -28,7 +28,7 @@ webpack(
 // build server code
 webpack(
   baseConfig({
-    env: 'production',
+    env: 'development',
     target: 'node',
     serverPort: 'process.env.PORT',
   })

@@ -1,7 +1,7 @@
 // TODO(dlk): extract this info from webpack’s stats file
 function resources() {
   if (process.env.NODE_ENV === 'development') {
-    return '<script async src="//localhost:4001/dist/client.js"></script>';
+    return '<script async src="//localhost:4001/dist/main.js"></script>';
   }
 
   return `
