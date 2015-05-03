@@ -127,7 +127,7 @@ class Home extends React.Component {
     var videos = this.state.videos;
     var foundVideo = _.findWhere(videos, { easyrtcid : easyrtcid });
     var index = _.indexOf(videos, foundVideo);
-    videos[index] = { filled: true, order: index };
+    videos[index] = { filled: false, order: index };
     this.setState({
       videos,
       availableSlots
