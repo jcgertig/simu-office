@@ -1,3 +1,4 @@
+console.log("build");
 var webpack = require('webpack');
 var write = require('fs').writeFileSync;
 var path = require('path');
@@ -7,9 +8,9 @@ var baseConfig = require('./webpack.base');
 // build client code
 // TODO: provide hooks for uploading to a cdn or static file
 // location, or rename it to be analagous with webpack
-if (!process.env.CDN_LOCATION) {
-  throw new Error('process.env.CDN_LOCATION must be set for built files location.'),
-}
+// if (!process.env.CDN_LOCATION) {
+//   throw new Error('process.env.CDN_LOCATION must be set for built files location.'),
+// };
 
 webpack(
   baseConfig({

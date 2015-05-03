@@ -9,7 +9,7 @@
     "suit": "node scripts/suit-conformance",
     "start": "DEBUG=*,-babel node . & node server.js",
     "test": "jest",
-    "build": "node ./scripts/build && node dist/main.js"
+    "build": "node scripts/build.js"
   },
   "engines": {
     "node": ">=0.12.0"
