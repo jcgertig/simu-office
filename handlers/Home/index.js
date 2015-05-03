@@ -148,6 +148,25 @@ class Home extends React.Component {
     });
   }
 
+  moveHere(currentId, order): ?void {
+    var newId = easyrtc.myEasyrtcid;
+    if (newId) {
+      if (!currentId || currentId.length === 0) {
+        var videos = this.state.videos;
+        var foundVideo = _.findWhere(videos, { easyrtcid: newId });
+        var oldOrder = foundVideo.order;
+        var oldVideo = _.findWhere(videos, { order: order });
+        var indexOfNew = _.indexOf(videos, foundVideo);
+        var indexOfOld =  _.indexOf(videos, oldVideo);
+        foundVideo.order = order;
+        oldVideo.order = oldOrder;
+        videos[indexOfNew] = foundVideo;
+        videos[indexOfOld] = oldVideo;
+        this.setState({ videos });
+      }
+    }
+  }
+
   render(): ?ReactElement {
     var videos = this.state.videos.sort(sortBy('order')).map((videoData, i) => {
       var className = videoData.filled? "CameraPreview" : "CameraPreview Hidden";
@@ -157,8 +176,14 @@ class Home extends React.Component {
         optionalProps.src =  vendorURL.createObjectURL(videoData.stream);
         optionalProps.autoPlay = true;
       }
-      return <video ref={`video${videoData.easyrtcid}`} id={`video${i}`} {...optionalProps}
-                key={videoData.easyrtcid} className={className} ></video>;
+
+      var wrapperClass = videoData.filled? "CameraPreviewWrapper" : "CameraPreviewWrapper Empty";
+
+      return (
+        <div className={wrapperClass} onClick={this.moveHere.bind(this, videoData.easyrtcid, videoData.order)}>
+          <video ref={`video${videoData.easyrtcid}`} id={`video${i}`} {...optionalProps} className={className} ></video>
+        </div>
+      );
     });
 
     return (

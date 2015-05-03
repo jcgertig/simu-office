@@ -29,6 +29,7 @@
     "normalize.css": "^3.0.3",
     "object.assign": "^1.1.1",
     "react": "^0.13.2",
+    "react-dnd": "^0.9.8",
     "react-resolver": "iamdustan/react-resolver#expose-client-data-dist",
     "react-router": "^0.13.2",
     "react-tap-event-plugin": "^0.1.6",

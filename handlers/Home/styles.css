@@ -13,12 +13,23 @@
 
 .CameraPreview {
   box-shadow: 4px 4px 15px 0px rgba(0,0,0,0.75);
-  width: 23%;
+  width: 100%;
   margin-right: 2%;
   border-radius: 4px;
   background: #000;
 }
 
+.CameraPreviewWrapper {
+  width: calc(23% - 2px);
+  height: 50vh;
+  margin-right: 2%;
+  display: inline-block;
+}
+
 .Hidden {
   display: none;
+}
+
+.Empty {
+  border: 1px dashed #DDD;
 }
