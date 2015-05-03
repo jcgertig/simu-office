@@ -39,7 +39,7 @@ class Home extends React.Component {
     }
 
     var videos = this.state.videos;
-    var myOrder = _.findWhere(videos, { easyrtcid: easyrtc.myEasyRtcId }).order;
+    var myOrder = _.findWhere(videos, { easyrtcid: easyrtc.myEasyRtcid }).order;
     _.forEach(videos, (video) => {
       if (video.filled) {
         var distance = Math.abs(myOrder - (video.order - 1));
