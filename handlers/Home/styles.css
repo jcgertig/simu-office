@@ -1,12 +1,24 @@
 /** @define HomeContent; use strict */
 
-.HomeContent {}
+.Home {
+  width: 100%;
+  height: 100%;
+}
 
-.HomeContent-child {}
-
-.HomeContent-child.is-state {}
+.Videos {
+  margin: 0 auto;
+  width: 98%;
+  vertical-align: middle;
+}
 
 .CameraPreview {
-  border: 1px solid rgb(15, 158, 238);
-  width: 94%;
+  box-shadow: 4px 4px 15px 0px rgba(0,0,0,0.75);
+  width: 23%;
+  margin-right: 2%;
+  border-radius: 4px;
+  background: #000;
+}
+
+.Hidden {
+  display: none;
 }

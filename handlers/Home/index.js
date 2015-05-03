@@ -1,11 +1,13 @@
 /** @flow */
-/* global navigator, io */
+/* global navigator, io, easyrtc */
 'use strict';
 
 require('./styles.css');
 
 import React from 'react';
 import {Resolver} from 'react-resolver';
+import _ from 'lodash';
+import sortBy from 'sort-by';
 
 var socketio;
 
@@ -14,191 +16,134 @@ class Home extends React.Component {
   constructor() {
     super();
     this.state = {
-      startButtonDisabled: true,
-      stopButtonDisabled: true,
-      justAudio: false,
-      recordVideoSeparately: false,
-      mediaStream: null,
-      videoStream: null,
-      audioStream: null
+      maxSlots: 4,
+      availableSlots: 4,
+      videos: [{ easyrtcid: '', filled: false, order: 0 }],
+      name: ''
     };
+  }
 
-    this.handleStart = this.handleStart.bind(this);
-    this.handleStop = this.handleStop.bind(this);
-   }
+  newConnection(easyrtcid, slot): ?void {
+    console.log(`connection count= ${easyrtc.getConnectionCount()}`);
+    var videos = this.state.videos;
+    var availableSlots = this.state.availableSlots;
+    if (availableSlots > 0) {
+      var index = (this.state.maxSlots-1) - availableSlots;
+      videos[index] = { easyrtcid, filled: true, order: index };
+      this.setState({
+        videos,
+        availableSlots: availableSlots+1
+      });
+    }
+  }
 
-  componentDidMount(): ?any {
-    socketio = io();
+  messageListener(easyrtcid, msgType, content): ?void {
+    console.log(easyrtcid, msgType, content);
+  }
 
-    socketio.on('connect', () => {
-      this.setState({ startButtonDisabled: false });
-    });
+  callEverybodyElse(roomName, otherPeople): ?void {
+    easyrtc.setRoomOccupantListener(null); // so we're only called once.
 
-    socketio.on('merged', (fileName) => {
-      var href = (location.href.split('/').pop().length ? location.href.replace(location.href.split('/').pop(), '') : location.href);
-      href = href + '/uploads/' + fileName;
-      console.log('got file ' + href);
-      var cameraPreview = this.refs.cameraPreview.getDOMNode();
-      cameraPreview.src = href
-      cameraPreview.play();
-      cameraPreview.muted = false;
-      cameraPreview.controls = true;
-    });
-
-    socketio.on('ffmpeg-output', (result) => {
-      var progressBar = this.refs.progressBar.getDOMNode();
-      var percentage = this.refs.percentage.getDOMNode();
-      if (parseInt(result) >= 100) {
-        progressBar.parentNode.style.display = 'none';
-        return;
-      }
-      progressBar.parentNode.style.display = 'block';
-      progressBar.value = result;
-      percentage.innerHTML = 'Ffmpeg Progress ' + result + "%";
-    });
-
-    socketio.on('ffmpeg-error', (error) => {
-      alert(error);
-    });
-
-    var self = this;
-    var state = {};
-    state.recordVideoSeparately = !!navigator.webkitGetUserMedia;
-
-    if (!!navigator.webkitGetUserMedia && !state.recordVideoSeparately) {
-      state.justAudio = true;
+    var list = [];
+    var connectCount = 0;
+    for (var easyrtcid in otherPeople) {
+      list.push(easyrtcid);
     }
 
-    this.setState(state);
+    //
+    // Connect in reverse order. Latter arriving people are more likely to have
+    // empty slots.
+    //
+    function establishConnection(position) {
+      function callSuccess() {
+        connectCount++;
+        if(connectCount < maxCALLERS && position > 0) {
+          establishConnection(position-1);
+        }
+      }
+      function callFailure(errorCode, errorText) {
+        easyrtc.showError(errorCode, errorText);
+        if(connectCount < maxCALLERS && position > 0) {
+          establishConnection(position-1);
+        }
+      }
+      easyrtc.call(list[position], callSuccess, callFailure);
+    }
+
+    if (list.length > 0) {
+      this.setState({ name: roomName }, () => {
+        establishConnection(list.length-1);
+      });
+    } else {
+      this.setState({ name: roomName });
+    }
   }
 
-  handleStart(): ?void {
-    var self = this;
-    this.setState({ startButtonDisabled: true}, () => {
-      navigator.getUserMedia({
-        audio: true,
-        video: true
-      }, function(stream) {
-        var state  = {};
-        state.mediaStream = stream;
-        state.audioStream = RecordRTC(stream, {
-          onAudioProcessStarted: function() {
-            if (self.state.recordVideoSeparately) {
-              self.state.videoStream.startRecording();
-            }
-
-            var cameraPreview = self.refs.cameraPreview.getDOMNode();
-            cameraPreview.src = window.URL.createObjectURL(stream);
-            cameraPreview.play();
-            cameraPreview.muted = true;
-            cameraPreview.controls = false;
-          }
-        });
-        state.videoStream = RecordRTC(stream, {
-          type: 'video'
-        });
-        state.audioStream.startRecording();
-        state.stopButtonDisabled = false;
-        self.setState(state);
-       }, function(error) {
-          alert( JSON.stringify(error) );
-       });
+  handleHangup(easyrtcid, slot): ?void {
+    var availableSlots = this.state.availableSlots;
+    var videos = _.this.state.videos;
+    var foundVideo = _.findWhere(videos, { easyrtcid });
+    videos = _.filter(videos, (video) => _.isEqual(video, foundVideo));
+    this.setState({
+      videos,
+      availableSlots: availableSlots+1
     });
   }
 
-  handleStop(): ?void {
-    var state = {
-      stopButtonDisabled: true,
-      startButtonDisabled: false
-    };
+  handleDisconnect(): ?void {
+    easyrtc.showError("LOST-CONNECTION", "Lost connection to signaling server");
+  }
 
-    this.setState(state, () => {
-      var audioStream = this.state.audioStream;
-      var videoStream = this.state.videoStream;
-      var mediaStream = this.state.mediaStream;
-      var cameraPreview = this.refs.cameraPreview.getDOMNode();
+  loginSuccess(easyrtcid): ?void {
+    var videos = this.state.videos;
+    videos[0] = { easyrtcid, filled: true };
+    this.setState({ videos });
+  }
 
-      // stop audio recorder
-      if (this.state.recordVideoSeparately){
-        audioStream.stopRecording(() => {
-          // stop video recorder
-          videoStream.stopRecording(() => {
-            // get audio data-URL
-            audioStream.getDataURL((audioDataURL) => {
-              // get video data-URL
-              videoStream.getDataURL((videoDataURL) => {
-                var files = {
-                  audio: {
-                    type: audioStream.getBlob().type || 'audio/wav',
-                    dataURL: audioDataURL
-                  },
-                  video: {
-                    type: videoStream.getBlob().type || 'video/webm',
-                    dataURL: videoDataURL
-                  }
-                };
-                socketio.emit('message', files);
-                if (mediaStream) {
-                  mediaStream.stop();
-                  this.setState({ mediaStream: mediaStream });
-                }
-              });
-            });
-            cameraPreview.src = '';
-            cameraPreview.poster = 'ajax-loader.gif';
-          });
-        });
+  componentDidUpdate(): ?any {
+    var videoIds = [];
+    for (var i = 1; i < this.state.availableSlots; i++) {
+      videoIds.push(`video${i}`);
+    }
+    easyrtc.easyApp("simu-office", "video0", videoIds, this.loginSuccess.bind(this));
+    _.forEach(this.state.videos, (video) => {
+      if (video.filled) {
+        var vol = (video.easyrtcid === easyrtc.myEasyrtcid())? 0 : (1 - 0.33*parseInt(video.order - 1));
+        this.refs[`video${video.easyrtcid}`].volume = vol;
       }
-      // if firefox or if you want to record only audio
-      // stop audio recorder
-      if (!this.state.recordVideoSeparately) {
-        this.state.audioStream.stopRecording(() => {
-          // get audio data-URL
-          this.state.audioStream.getDataURL((audioDataURL) => {
-            var files = {
-              audio: {
-                type: audioStream.getBlob().type || 'audio/wav',
-                dataURL: audioDataURL
-              }
-            };
-            socketio.emit('message', files);
-            if (mediaStream) {
-              mediaStream.stop();
-              this.setState({ mediaStream: mediaStream });
-            }
-          });
-          cameraPreview.src = '';
-          cameraPreview.poster = 'ajax-loader.gif';
-        });
-      }
+    });
+  }
+
+  componentDidMount(): ?any {
+    var videoIds = [];
+    var videos = this.state.videos;
+    for (var i = 1; i < this.state.availableSlots; i++) {
+      videoIds.push(`video${i}`);
+      videos.push({ filled: false, order: i });
+    }
+
+    this.setState({ videos }, () => {
+      easyrtc.setRoomOccupantListener(this.callEverybodyElse.bind(this));
+      easyrtc.easyApp("simu-office", "video0", videoIds, this.loginSuccess.bind(this));
+      easyrtc.setPeerListener(this.messageListener.bind(this));
+      easyrtc.setDisconnectListener(this.handleDisconnect.bind(this));
+      easyrtc.setOnCall(this.newConnection.bind(this));
+      easyrtc.setOnHangup(this.handleHangup.bind(this));
     });
   }
 
   render(): ?ReactElement {
-    var media = <video ref="cameraPreview" className="CameraPreview" ></video>;
-    if (this.state.justAudio) {
-      media = <audio ref="cameraPreview" controls className="CameraPreview"></audio>;
-    }
+    var videos = this.state.videos.sort(sortBy('order')).map((videoData, i) => {
+      var className = videoData.filled? "CameraPreview" : "CameraPreview Hidden";
+      return <video ref={`video${videoData.easyrtcid}`} id={`video${i}`}
+                key={videoData.easyrtcid} className={className} ></video>;
+    });
 
     return (
       <div className="Home">
-        <div>
-          {media}
-        </div>
-
-        <div>
-          <label ref="percentage">Ffmpeg Progress 0%</label>
-          <progress ref="progressBar" value="0" max="100"></progress>
-          <br />
-        </div>
-
-        <div>
-          <button disabled={this.state.startButtonDisabled} onClick={this.handleStart}>
-            Start Recording
-          </button>
-          <button disabled={this.state.stopButtonDisabled} onClick={this.handleStop}>
-            Stop Recording
-          </button>
+        <h1>Room: {this.state.name}</h1>
+        <div className="Videos">
+          {videos}
         </div>
       </div>
     );
