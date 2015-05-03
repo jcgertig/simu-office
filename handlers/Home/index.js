@@ -34,6 +34,8 @@ class Home extends React.Component {
       var video = this.refs[`video${easyrtc.myEasyrtcid}`].getDOMNode();
       video.src = easyrtc.getLocalStreamAsUrl();
       video.autoplay = true;
+      video.mute = true;
+      video.volume = 0;
     }
 
     _.forEach(this.state.videos, (video) => {
@@ -53,19 +55,15 @@ class Home extends React.Component {
     }
 
     this.setState({ videos }, () => {
-      this.setUpRTC.bind(this)(videoIds);
+      easyrtc.dontAddCloseButtons();
+      easyrtc.setRoomOccupantListener(this.callEverybodyElse.bind(this));
+      easyrtc.easyApp("simu-office", "video0", videoIds, this.loginSuccess.bind(this));
+      easyrtc.setPeerListener(this.messageListener.bind(this));
+      easyrtc.setDisconnectListener(this.handleDisconnect.bind(this));
+      easyrtc.setOnCall(this.newConnection.bind(this));
+      easyrtc.setOnHangup(this.handleHangup.bind(this));
+      easyrtc.setStreamAcceptor(this.handleStream.bind(this));
     });
-  }
-
-  setUpRTC(videoIds): ?void {
-    easyrtc.dontAddCloseButtons();
-    easyrtc.setRoomOccupantListener(this.callEverybodyElse.bind(this));
-    easyrtc.easyApp("simu-office", "video0", videoIds, this.loginSuccess.bind(this));
-    easyrtc.setPeerListener(this.messageListener.bind(this));
-    easyrtc.setDisconnectListener(this.handleDisconnect.bind(this));
-    easyrtc.setOnCall(this.newConnection.bind(this));
-    easyrtc.setOnHangup(this.handleHangup.bind(this));
-    easyrtc.setStreamAcceptor(this.handleStream.bind(this));
   }
 
   newConnection(easyrtcid, slot): ?void {
@@ -144,7 +142,6 @@ class Home extends React.Component {
     var videos = this.state.videos;
     videos[0] = { easyrtcid, filled: true, order: 0 };
     var availableSlots = (this.state.maxSlots-1);
-    console.log(videos);
     this.setState({
       videos,
       availableSlots
