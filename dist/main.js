@@ -382,7 +382,7 @@ require("source-map-support").install();
 /* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(46), __esModule: true };
+	module.exports = { "default": __webpack_require__(47), __esModule: true };
 
 /***/ },
 /* 17 */
@@ -392,9 +392,9 @@ require("source-map-support").install();
 	
 	var _inherits = __webpack_require__(42)['default'];
 	
-	var _createClass = __webpack_require__(44)['default'];
+	var _createClass = __webpack_require__(43)['default'];
 	
-	var _classCallCheck = __webpack_require__(45)['default'];
+	var _classCallCheck = __webpack_require__(44)['default'];
 	
 	var _Object$defineProperty = __webpack_require__(16)['default'];
 	
@@ -413,7 +413,7 @@ require("source-map-support").install();
 	/** @flow */
 	'use strict';
 	
-	__webpack_require__(47);
+	__webpack_require__(48);
 	
 	var AppBase = (function (_React$Component) {
 	  function AppBase() {
@@ -449,15 +449,19 @@ require("source-map-support").install();
 
 	'use strict';
 	
+	var _extends = __webpack_require__(83)['default'];
+	
 	var _inherits = __webpack_require__(42)['default'];
 	
-	var _get = __webpack_require__(43)['default'];
+	var _get = __webpack_require__(45)['default'];
 	
-	var _createClass = __webpack_require__(44)['default'];
+	var _createClass = __webpack_require__(43)['default'];
 	
-	var _classCallCheck = __webpack_require__(45)['default'];
+	var _classCallCheck = __webpack_require__(44)['default'];
 	
 	var _Object$defineProperty = __webpack_require__(16)['default'];
+	
+	var _Object$keys = __webpack_require__(46)['default'];
 	
 	var _interopRequireDefault = __webpack_require__(12)['default'];
 	
@@ -483,7 +487,7 @@ require("source-map-support").install();
 	/* global navigator, io, easyrtc */
 	'use strict';
 	
-	__webpack_require__(47);
+	__webpack_require__(48);
 	
 	var socketio;
 	
@@ -495,111 +499,33 @@ require("source-map-support").install();
 	    this.state = {
 	      maxSlots: 4,
 	      availableSlots: 4,
-	      videos: [{ easyrtcid: '', filled: false, order: 0 }],
-	      name: ''
+	      videos: [{ filled: false, order: 0 }],
+	      name: '',
+	      others: []
 	    };
 	  }
 	
 	  _inherits(Home, _React$Component);
 	
 	  _createClass(Home, [{
-	    key: 'newConnection',
-	    value: function newConnection(easyrtcid, slot) {
-	      console.log('connection count= ' + easyrtc.getConnectionCount());
-	      var videos = this.state.videos;
-	      var availableSlots = this.state.availableSlots;
-	      if (availableSlots > 0) {
-	        var index = this.state.maxSlots - 1 - availableSlots;
-	        videos[index] = { easyrtcid: easyrtcid, filled: true, order: index };
-	        this.setState({
-	          videos: videos,
-	          availableSlots: availableSlots + 1
-	        });
-	      }
-	    }
-	  }, {
-	    key: 'messageListener',
-	    value: function messageListener(easyrtcid, msgType, content) {
-	      console.log(easyrtcid, msgType, content);
-	    }
-	  }, {
-	    key: 'callEverybodyElse',
-	    value: function callEverybodyElse(roomName, otherPeople) {
-	      easyrtc.setRoomOccupantListener(null); // so we're only called once.
-	
-	      var list = [];
-	      var connectCount = 0;
-	      for (var easyrtcid in otherPeople) {
-	        list.push(easyrtcid);
-	      }
-	
-	      //
-	      // Connect in reverse order. Latter arriving people are more likely to have
-	      // empty slots.
-	      //
-	      function establishConnection(position) {
-	        function callSuccess() {
-	          connectCount++;
-	          if (connectCount < maxCALLERS && position > 0) {
-	            establishConnection(position - 1);
-	          }
-	        }
-	        function callFailure(errorCode, errorText) {
-	          easyrtc.showError(errorCode, errorText);
-	          if (connectCount < maxCALLERS && position > 0) {
-	            establishConnection(position - 1);
-	          }
-	        }
-	        easyrtc.call(list[position], callSuccess, callFailure);
-	      }
-	
-	      if (list.length > 0) {
-	        this.setState({ name: roomName }, function () {
-	          establishConnection(list.length - 1);
-	        });
-	      } else {
-	        this.setState({ name: roomName });
-	      }
-	    }
-	  }, {
-	    key: 'handleHangup',
-	    value: function handleHangup(easyrtcid, slot) {
-	      var availableSlots = this.state.availableSlots;
-	      var videos = _import2['default']['this'].state.videos;
-	      var foundVideo = _import2['default'].findWhere(videos, { easyrtcid: easyrtcid });
-	      videos = _import2['default'].filter(videos, function (video) {
-	        return _import2['default'].isEqual(video, foundVideo);
-	      });
-	      this.setState({
-	        videos: videos,
-	        availableSlots: availableSlots + 1
-	      });
-	    }
-	  }, {
-	    key: 'handleDisconnect',
-	    value: function handleDisconnect() {
-	      easyrtc.showError('LOST-CONNECTION', 'Lost connection to signaling server');
-	    }
-	  }, {
-	    key: 'loginSuccess',
-	    value: function loginSuccess(easyrtcid) {
-	      var videos = this.state.videos;
-	      videos[0] = { easyrtcid: easyrtcid, filled: true };
-	      this.setState({ videos: videos });
-	    }
-	  }, {
 	    key: 'componentDidUpdate',
 	    value: function componentDidUpdate() {
 	      var _this = this;
 	
 	      var videoIds = [];
-	      for (var i = 1; i < this.state.availableSlots; i++) {
+	      for (var i = 1; i < this.state.maxSlots; i++) {
 	        videoIds.push('video' + i);
 	      }
-	      easyrtc.easyApp('simu-office', 'video0', videoIds, this.loginSuccess.bind(this));
+	
+	      if (_Object$keys(easyrtc.getRoomsJoined()).length > 0) {
+	        var video = this.refs['video' + easyrtc.myEasyrtcid].getDOMNode();
+	        video.src = easyrtc.getLocalStreamAsUrl();
+	        video.autoplay = true;
+	      }
+	
 	      _import2['default'].forEach(this.state.videos, function (video) {
 	        if (video.filled) {
-	          var vol = video.easyrtcid === easyrtc.myEasyrtcid() ? 0 : 1 - 0.33 * parseInt(video.order - 1);
+	          var vol = video.easyrtcid === easyrtc.myEasyrtcid ? 0 : 1 - 0.33 * parseInt(video.order - 1);
 	          _this.refs['video' + video.easyrtcid].volume = vol;
 	        }
 	      });
@@ -617,12 +543,112 @@ require("source-map-support").install();
 	      }
 	
 	      this.setState({ videos: videos }, function () {
-	        easyrtc.setRoomOccupantListener(_this2.callEverybodyElse.bind(_this2));
-	        easyrtc.easyApp('simu-office', 'video0', videoIds, _this2.loginSuccess.bind(_this2));
-	        easyrtc.setPeerListener(_this2.messageListener.bind(_this2));
-	        easyrtc.setDisconnectListener(_this2.handleDisconnect.bind(_this2));
-	        easyrtc.setOnCall(_this2.newConnection.bind(_this2));
-	        easyrtc.setOnHangup(_this2.handleHangup.bind(_this2));
+	        _this2.setUpRTC.bind(_this2)(videoIds);
+	      });
+	    }
+	  }, {
+	    key: 'setUpRTC',
+	    value: function setUpRTC(videoIds) {
+	      easyrtc.dontAddCloseButtons();
+	      easyrtc.setRoomOccupantListener(this.callEverybodyElse.bind(this));
+	      easyrtc.easyApp('simu-office', 'video0', videoIds, this.loginSuccess.bind(this));
+	      easyrtc.setPeerListener(this.messageListener.bind(this));
+	      easyrtc.setDisconnectListener(this.handleDisconnect.bind(this));
+	      easyrtc.setOnCall(this.newConnection.bind(this));
+	      easyrtc.setOnHangup(this.handleHangup.bind(this));
+	      easyrtc.setStreamAcceptor(this.handleStream.bind(this));
+	    }
+	  }, {
+	    key: 'newConnection',
+	    value: function newConnection(easyrtcid, slot) {
+	      console.log('connection count= ' + easyrtc.getConnectionCount());
+	    }
+	  }, {
+	    key: 'handleStream',
+	    value: function handleStream(easyrtcid, stream) {
+	      var videos = this.state.videos;
+	      var availableSlots = this.state.availableSlots;
+	      if (availableSlots > 0) {
+	        var index = this.state.maxSlots - availableSlots;
+	        videos[index] = { easyrtcid: easyrtcid, filled: true, order: index, stream: stream };
+	        this.setState({
+	          videos: videos,
+	          availableSlots: availableSlots - 1
+	        });
+	      }
+	    }
+	  }, {
+	    key: 'messageListener',
+	    value: function messageListener(easyrtcid, msgType, content) {
+	      console.log(easyrtcid, msgType, content);
+	    }
+	  }, {
+	    key: 'establishConnection',
+	    value: function establishConnection(list, position, connectCount) {
+	      var maxSlots = this.state.maxSlots;
+	      function callSuccess() {
+	        connectCount++;
+	        if (connectCount < maxSlots && position > 0) {
+	          this.establishConnection.bind(this)(list, position - 1, connectCount);
+	        }
+	      }
+	      function callFailure(errorCode, errorText) {
+	        easyrtc.showError(errorCode, errorText);
+	        if (connectCount < maxSlots && position > 0) {
+	          this.establishConnection.bind(this)(list, position - 1, connectCount);
+	        }
+	      }
+	      easyrtc.call(list[position], callSuccess, callFailure);
+	    }
+	  }, {
+	    key: 'callEverybodyElse',
+	    value: function callEverybodyElse(roomName, otherPeople, myInfo) {
+	      var _this3 = this;
+	
+	      easyrtc.setRoomOccupantListener(null); // so we're only called once.
+	
+	      var list = [];
+	      for (var easyrtcid in otherPeople) {
+	        list.push(easyrtcid);
+	      }
+	
+	      if (list.length > 0) {
+	        this.setState({ name: roomName, others: list }, function () {
+	          _this3.establishConnection.bind(_this3)(list, list.length - 1, 0);
+	        });
+	      } else {
+	        this.setState({ name: roomName, others: [] });
+	      }
+	    }
+	  }, {
+	    key: 'handleHangup',
+	    value: function handleHangup(easyrtcid, slot) {
+	      console.log(easyrtcid);
+	      var availableSlots = this.state.availableSlots + 1;
+	      var videos = this.state.videos;
+	      var foundVideo = _import2['default'].findWhere(videos, { easyrtcid: easyrtcid });
+	      var index = _import2['default'].indexOf(videos, foundVideo);
+	      videos[index] = { filled: true, order: index };
+	      this.setState({
+	        videos: videos,
+	        availableSlots: availableSlots
+	      });
+	    }
+	  }, {
+	    key: 'handleDisconnect',
+	    value: function handleDisconnect() {
+	      easyrtc.showError('LOST-CONNECTION', 'Lost connection to signaling server');
+	    }
+	  }, {
+	    key: 'loginSuccess',
+	    value: function loginSuccess(easyrtcid) {
+	      var videos = this.state.videos;
+	      videos[0] = { easyrtcid: easyrtcid, filled: true, order: 0 };
+	      var availableSlots = this.state.maxSlots - 1;
+	      console.log(videos);
+	      this.setState({
+	        videos: videos,
+	        availableSlots: availableSlots
 	      });
 	    }
 	  }, {
@@ -630,8 +656,14 @@ require("source-map-support").install();
 	    value: function render() {
 	      var videos = this.state.videos.sort(_sortBy2['default']('order')).map(function (videoData, i) {
 	        var className = videoData.filled ? 'CameraPreview' : 'CameraPreview Hidden';
-	        return _React2['default'].createElement('video', { ref: 'video' + videoData.easyrtcid, id: 'video' + i,
-	          key: videoData.easyrtcid, className: className });
+	        var optionalProps = {};
+	        if (videoData.stream) {
+	          var vendorURL = window.URL || window.webkitURL;
+	          optionalProps.src = vendorURL.createObjectURL(videoData.stream);
+	          optionalProps.autoPlay = true;
+	        }
+	        return _React2['default'].createElement('video', _extends({ ref: 'video' + videoData.easyrtcid, id: 'video' + i }, optionalProps, {
+	          key: videoData.easyrtcid, className: className }));
 	      });
 	
 	      return _React2['default'].createElement(
@@ -679,9 +711,9 @@ require("source-map-support").install();
 	
 	var _inherits = __webpack_require__(42)['default'];
 	
-	var _createClass = __webpack_require__(44)['default'];
+	var _createClass = __webpack_require__(43)['default'];
 	
-	var _classCallCheck = __webpack_require__(45)['default'];
+	var _classCallCheck = __webpack_require__(44)['default'];
 	
 	var _Object$defineProperty = __webpack_require__(16)['default'];
 	
@@ -700,7 +732,7 @@ require("source-map-support").install();
 	/** @flow */
 	'use strict';
 	
-	__webpack_require__(47);
+	__webpack_require__(48);
 	
 	var NotFound = (function (_React$Component) {
 	  function NotFound() {
@@ -749,7 +781,7 @@ require("source-map-support").install();
 
 	"use strict";
 	
-	var _Object$create = __webpack_require__(48)["default"];
+	var _Object$create = __webpack_require__(49)["default"];
 	
 	var _inherits = function _inherits(subClass, superClass) {
 	  if (typeof superClass !== "function" && superClass !== null) {
@@ -763,7 +795,7 @@ require("source-map-support").install();
 	  }
 	};
 	
-	var PropTypes = __webpack_require__(49);
+	var PropTypes = __webpack_require__(50);
 	var RouteHandler = __webpack_require__(27);
 	var Route = __webpack_require__(26);
 	
@@ -811,9 +843,9 @@ require("source-map-support").install();
 
 	"use strict";
 	
-	var _Object$defineProperties = __webpack_require__(50)["default"];
+	var _Object$defineProperties = __webpack_require__(51)["default"];
 	
-	var _Object$create = __webpack_require__(48)["default"];
+	var _Object$create = __webpack_require__(49)["default"];
 	
 	var _createClass = (function () {
 	  function defineProperties(target, props) {
@@ -838,8 +870,8 @@ require("source-map-support").install();
 	};
 	
 	var React = __webpack_require__(2);
-	var assign = __webpack_require__(62);
-	var PropTypes = __webpack_require__(49);
+	var assign = __webpack_require__(65);
+	var PropTypes = __webpack_require__(50);
 	
 	function isLeftClickEvent(event) {
 	  return event.button === 0;
@@ -974,7 +1006,7 @@ require("source-map-support").install();
 
 	"use strict";
 	
-	var _Object$create = __webpack_require__(48)["default"];
+	var _Object$create = __webpack_require__(49)["default"];
 	
 	var _inherits = function _inherits(subClass, superClass) {
 	  if (typeof superClass !== "function" && superClass !== null) {
@@ -988,7 +1020,7 @@ require("source-map-support").install();
 	  }
 	};
 	
-	var PropTypes = __webpack_require__(49);
+	var PropTypes = __webpack_require__(50);
 	var RouteHandler = __webpack_require__(27);
 	var Route = __webpack_require__(26);
 	
@@ -1037,7 +1069,7 @@ require("source-map-support").install();
 
 	"use strict";
 	
-	var _Object$create = __webpack_require__(48)["default"];
+	var _Object$create = __webpack_require__(49)["default"];
 	
 	var _inherits = function _inherits(subClass, superClass) {
 	  if (typeof superClass !== "function" && superClass !== null) {
@@ -1051,7 +1083,7 @@ require("source-map-support").install();
 	  }
 	};
 	
-	var PropTypes = __webpack_require__(49);
+	var PropTypes = __webpack_require__(50);
 	var Route = __webpack_require__(26);
 	
 	/**
@@ -1095,9 +1127,9 @@ require("source-map-support").install();
 
 	"use strict";
 	
-	var _Object$defineProperties = __webpack_require__(50)["default"];
+	var _Object$defineProperties = __webpack_require__(51)["default"];
 	
-	var _Object$create = __webpack_require__(48)["default"];
+	var _Object$create = __webpack_require__(49)["default"];
 	
 	var _createClass = (function () {
 	  function defineProperties(target, props) {
@@ -1122,8 +1154,8 @@ require("source-map-support").install();
 	};
 	
 	var React = __webpack_require__(2);
-	var invariant = __webpack_require__(63);
-	var PropTypes = __webpack_require__(49);
+	var invariant = __webpack_require__(66);
+	var PropTypes = __webpack_require__(50);
 	var RouteHandler = __webpack_require__(27);
 	
 	/**
@@ -1212,9 +1244,9 @@ require("source-map-support").install();
 
 	"use strict";
 	
-	var _Object$defineProperties = __webpack_require__(50)["default"];
+	var _Object$defineProperties = __webpack_require__(51)["default"];
 	
-	var _Object$create = __webpack_require__(48)["default"];
+	var _Object$create = __webpack_require__(49)["default"];
 	
 	var _createClass = (function () {
 	  function defineProperties(target, props) {
@@ -1239,9 +1271,9 @@ require("source-map-support").install();
 	};
 	
 	var React = __webpack_require__(2);
-	var ContextWrapper = __webpack_require__(51);
-	var assign = __webpack_require__(62);
-	var PropTypes = __webpack_require__(49);
+	var ContextWrapper = __webpack_require__(52);
+	var assign = __webpack_require__(65);
+	var PropTypes = __webpack_require__(50);
 	
 	var REF_NAME = "__routeHandler__";
 	
@@ -1333,7 +1365,7 @@ require("source-map-support").install();
 
 	"use strict";
 	
-	var LocationActions = __webpack_require__(52);
+	var LocationActions = __webpack_require__(53);
 	var History = __webpack_require__(35);
 	
 	var _listeners = [];
@@ -1449,7 +1481,7 @@ require("source-map-support").install();
 
 	"use strict";
 	
-	var LocationActions = __webpack_require__(52);
+	var LocationActions = __webpack_require__(53);
 	var History = __webpack_require__(35);
 	
 	var _listeners = [];
@@ -1576,7 +1608,7 @@ require("source-map-support").install();
 
 	"use strict";
 	
-	var _Object$defineProperties = __webpack_require__(50)["default"];
+	var _Object$defineProperties = __webpack_require__(51)["default"];
 	
 	var _createClass = (function () {
 	  function defineProperties(target, props) {
@@ -1594,7 +1626,7 @@ require("source-map-support").install();
 	  }
 	};
 	
-	var invariant = __webpack_require__(63);
+	var invariant = __webpack_require__(66);
 	
 	function throwCannotModify() {
 	  invariant(false, "You cannot modify a static location");
@@ -1645,7 +1677,7 @@ require("source-map-support").install();
 
 	"use strict";
 	
-	var _Object$defineProperties = __webpack_require__(50)["default"];
+	var _Object$defineProperties = __webpack_require__(51)["default"];
 	
 	var _createClass = (function () {
 	  function defineProperties(target, props) {
@@ -1663,8 +1695,8 @@ require("source-map-support").install();
 	  }
 	};
 	
-	var invariant = __webpack_require__(63);
-	var LocationActions = __webpack_require__(52);
+	var invariant = __webpack_require__(66);
+	var LocationActions = __webpack_require__(53);
 	var History = __webpack_require__(35);
 	
 	/**
@@ -1759,7 +1791,7 @@ require("source-map-support").install();
 
 	"use strict";
 	
-	var LocationActions = __webpack_require__(52);
+	var LocationActions = __webpack_require__(53);
 	
 	/**
 	 * A scroll behavior that attempts to imitate the default behavior
@@ -1813,8 +1845,8 @@ require("source-map-support").install();
 
 	"use strict";
 	
-	var invariant = __webpack_require__(63);
-	var canUseDOM = __webpack_require__(64).canUseDOM;
+	var invariant = __webpack_require__(66);
+	var canUseDOM = __webpack_require__(67).canUseDOM;
 	
 	var History = {
 	
@@ -1848,8 +1880,8 @@ require("source-map-support").install();
 
 	"use strict";
 	
-	var warning = __webpack_require__(65);
-	var PropTypes = __webpack_require__(49);
+	var warning = __webpack_require__(68);
+	var PropTypes = __webpack_require__(50);
 	
 	function deprecatedMethod(routerMethodName, fn) {
 	  return function () {
@@ -1932,8 +1964,8 @@ require("source-map-support").install();
 
 	"use strict";
 	
-	var warning = __webpack_require__(65);
-	var PropTypes = __webpack_require__(49);
+	var warning = __webpack_require__(68);
+	var PropTypes = __webpack_require__(50);
 	
 	function deprecatedMethod(routerMethodName, fn) {
 	  return function () {
@@ -2020,7 +2052,7 @@ require("source-map-support").install();
 
 	"use strict";
 	
-	var _Object$defineProperties = __webpack_require__(50)["default"];
+	var _Object$defineProperties = __webpack_require__(51)["default"];
 	
 	var _createClass = (function () {
 	  function defineProperties(target, props) {
@@ -2038,10 +2070,10 @@ require("source-map-support").install();
 	  }
 	};
 	
-	var assign = __webpack_require__(62);
-	var invariant = __webpack_require__(63);
-	var warning = __webpack_require__(65);
-	var PathUtils = __webpack_require__(53);
+	var assign = __webpack_require__(65);
+	var invariant = __webpack_require__(66);
+	var warning = __webpack_require__(68);
+	var PathUtils = __webpack_require__(54);
 	
 	var _currentRoute;
 	
@@ -2248,8 +2280,8 @@ require("source-map-support").install();
 	
 	/* jshint -W084 */
 	var React = __webpack_require__(2);
-	var assign = __webpack_require__(62);
-	var warning = __webpack_require__(65);
+	var assign = __webpack_require__(65);
+	var warning = __webpack_require__(68);
 	var DefaultRoute = __webpack_require__(22);
 	var NotFoundRoute = __webpack_require__(24);
 	var Redirect = __webpack_require__(25);
@@ -2334,27 +2366,27 @@ require("source-map-support").install();
 	
 	/* jshint -W058 */
 	var React = __webpack_require__(2);
-	var warning = __webpack_require__(65);
-	var invariant = __webpack_require__(63);
-	var canUseDOM = __webpack_require__(64).canUseDOM;
-	var LocationActions = __webpack_require__(52);
+	var warning = __webpack_require__(68);
+	var invariant = __webpack_require__(66);
+	var canUseDOM = __webpack_require__(67).canUseDOM;
+	var LocationActions = __webpack_require__(53);
 	var ImitateBrowserBehavior = __webpack_require__(33);
 	var HashLocation = __webpack_require__(28);
 	var HistoryLocation = __webpack_require__(29);
 	var RefreshLocation = __webpack_require__(30);
 	var StaticLocation = __webpack_require__(31);
-	var ScrollHistory = __webpack_require__(54);
+	var ScrollHistory = __webpack_require__(55);
 	var createRoutesFromReactChildren = __webpack_require__(39);
-	var isReactChildren = __webpack_require__(55);
-	var Transition = __webpack_require__(56);
-	var PropTypes = __webpack_require__(49);
-	var Redirect = __webpack_require__(57);
+	var isReactChildren = __webpack_require__(56);
+	var Transition = __webpack_require__(57);
+	var PropTypes = __webpack_require__(50);
+	var Redirect = __webpack_require__(58);
 	var History = __webpack_require__(35);
-	var Cancellation = __webpack_require__(58);
-	var Match = __webpack_require__(59);
+	var Cancellation = __webpack_require__(59);
+	var Match = __webpack_require__(60);
 	var Route = __webpack_require__(38);
-	var supportsHistory = __webpack_require__(60);
-	var PathUtils = __webpack_require__(53);
+	var supportsHistory = __webpack_require__(61);
+	var PathUtils = __webpack_require__(54);
 	
 	/**
 	 * The default location for new routers.
@@ -2906,7 +2938,7 @@ require("source-map-support").install();
 
 	"use strict";
 	
-	var _Object$create = __webpack_require__(48)["default"];
+	var _Object$create = __webpack_require__(49)["default"];
 	
 	exports["default"] = function (subClass, superClass) {
 	  if (typeof superClass !== "function" && superClass !== null) {
@@ -2932,7 +2964,50 @@ require("source-map-support").install();
 
 	"use strict";
 	
-	var _Object$getOwnPropertyDescriptor = __webpack_require__(61)["default"];
+	var _Object$defineProperty = __webpack_require__(16)["default"];
+	
+	exports["default"] = (function () {
+	  function defineProperties(target, props) {
+	    for (var i = 0; i < props.length; i++) {
+	      var descriptor = props[i];
+	      descriptor.enumerable = descriptor.enumerable || false;
+	      descriptor.configurable = true;
+	      if ("value" in descriptor) descriptor.writable = true;
+	
+	      _Object$defineProperty(target, descriptor.key, descriptor);
+	    }
+	  }
+	
+	  return function (Constructor, protoProps, staticProps) {
+	    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+	    if (staticProps) defineProperties(Constructor, staticProps);
+	    return Constructor;
+	  };
+	})();
+	
+	exports.__esModule = true;
+
+/***/ },
+/* 44 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	exports["default"] = function (instance, Constructor) {
+	  if (!(instance instanceof Constructor)) {
+	    throw new TypeError("Cannot call a class as a function");
+	  }
+	};
+	
+	exports.__esModule = true;
+
+/***/ },
+/* 45 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _Object$getOwnPropertyDescriptor = __webpack_require__(62)["default"];
 	
 	exports["default"] = function get(_x, _x2, _x3) {
 	  var _again = true;
@@ -2975,59 +3050,22 @@ require("source-map-support").install();
 	exports.__esModule = true;
 
 /***/ },
-/* 44 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var _Object$defineProperty = __webpack_require__(16)["default"];
-	
-	exports["default"] = (function () {
-	  function defineProperties(target, props) {
-	    for (var i = 0; i < props.length; i++) {
-	      var descriptor = props[i];
-	      descriptor.enumerable = descriptor.enumerable || false;
-	      descriptor.configurable = true;
-	      if ("value" in descriptor) descriptor.writable = true;
-	
-	      _Object$defineProperty(target, descriptor.key, descriptor);
-	    }
-	  }
-	
-	  return function (Constructor, protoProps, staticProps) {
-	    if (protoProps) defineProperties(Constructor.prototype, protoProps);
-	    if (staticProps) defineProperties(Constructor, staticProps);
-	    return Constructor;
-	  };
-	})();
-	
-	exports.__esModule = true;
-
-/***/ },
-/* 45 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	exports["default"] = function (instance, Constructor) {
-	  if (!(instance instanceof Constructor)) {
-	    throw new TypeError("Cannot call a class as a function");
-	  }
-	};
-	
-	exports.__esModule = true;
-
-/***/ },
 /* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var $ = __webpack_require__(66);
+	module.exports = { "default": __webpack_require__(63), __esModule: true };
+
+/***/ },
+/* 47 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var $ = __webpack_require__(64);
 	module.exports = function defineProperty(it, key, desc){
 	  return $.setDesc(it, key, desc);
 	};
 
 /***/ },
-/* 47 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
 	(function(exports) {
@@ -3036,18 +3074,18 @@ require("source-map-support").install();
 
 
 /***/ },
-/* 48 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(67), __esModule: true };
+	module.exports = { "default": __webpack_require__(69), __esModule: true };
 
 /***/ },
-/* 49 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var assign = __webpack_require__(62);
+	var assign = __webpack_require__(65);
 	var ReactPropTypes = __webpack_require__(2).PropTypes;
 	var Route = __webpack_require__(38);
 	
@@ -3078,20 +3116,20 @@ require("source-map-support").install();
 	module.exports = PropTypes;
 
 /***/ },
-/* 50 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(68), __esModule: true };
+	module.exports = { "default": __webpack_require__(70), __esModule: true };
 
 /***/ },
-/* 51 */
+/* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var _Object$defineProperties = __webpack_require__(50)["default"];
+	var _Object$defineProperties = __webpack_require__(51)["default"];
 	
-	var _Object$create = __webpack_require__(48)["default"];
+	var _Object$create = __webpack_require__(49)["default"];
 	
 	var _createClass = (function () {
 	  function defineProperties(target, props) {
@@ -3148,7 +3186,7 @@ require("source-map-support").install();
 	module.exports = ContextWrapper;
 
 /***/ },
-/* 52 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -3178,14 +3216,14 @@ require("source-map-support").install();
 	module.exports = LocationActions;
 
 /***/ },
-/* 53 */
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var invariant = __webpack_require__(63);
-	var objectAssign = __webpack_require__(73);
-	var qs = __webpack_require__(74);
+	var invariant = __webpack_require__(66);
+	var objectAssign = __webpack_require__(77);
+	var qs = __webpack_require__(76);
 	
 	var paramCompileMatcher = /:([a-zA-Z_$][a-zA-Z0-9_$]*)|[*.()\[\]\\+|{}^$]/g;
 	var paramInjectMatcher = /:([a-zA-Z_$][a-zA-Z0-9_$?]*[?]?)|[*]/g;
@@ -3336,14 +3374,14 @@ require("source-map-support").install();
 	module.exports = PathUtils;
 
 /***/ },
-/* 54 */
+/* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var invariant = __webpack_require__(63);
-	var canUseDOM = __webpack_require__(64).canUseDOM;
-	var getWindowScrollPosition = __webpack_require__(69);
+	var invariant = __webpack_require__(66);
+	var canUseDOM = __webpack_require__(67).canUseDOM;
+	var getWindowScrollPosition = __webpack_require__(71);
 	
 	function shouldUpdateScroll(state, prevState) {
 	  if (!prevState) {
@@ -3416,7 +3454,7 @@ require("source-map-support").install();
 	module.exports = ScrollHistory;
 
 /***/ },
-/* 55 */
+/* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -3434,15 +3472,15 @@ require("source-map-support").install();
 	module.exports = isReactChildren;
 
 /***/ },
-/* 56 */
+/* 57 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	/* jshint -W058 */
 	
-	var Cancellation = __webpack_require__(58);
-	var Redirect = __webpack_require__(57);
+	var Cancellation = __webpack_require__(59);
+	var Redirect = __webpack_require__(58);
 	
 	/**
 	 * Encapsulates a transition to a given path.
@@ -3514,7 +3552,7 @@ require("source-map-support").install();
 	module.exports = Transition;
 
 /***/ },
-/* 57 */
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -3531,7 +3569,7 @@ require("source-map-support").install();
 	module.exports = Redirect;
 
 /***/ },
-/* 58 */
+/* 59 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -3545,12 +3583,12 @@ require("source-map-support").install();
 	module.exports = Cancellation;
 
 /***/ },
-/* 59 */
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var _Object$defineProperties = __webpack_require__(50)["default"];
+	var _Object$defineProperties = __webpack_require__(51)["default"];
 	
 	var _createClass = (function () {
 	  function defineProperties(target, props) {
@@ -3569,7 +3607,7 @@ require("source-map-support").install();
 	};
 	
 	/* jshint -W084 */
-	var PathUtils = __webpack_require__(53);
+	var PathUtils = __webpack_require__(54);
 	
 	function deepSearch(route, pathname, query) {
 	  // Check the subtree first to find the most deeply-nested match.
@@ -3641,7 +3679,7 @@ require("source-map-support").install();
 	module.exports = Match;
 
 /***/ },
-/* 60 */
+/* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -3662,13 +3700,128 @@ require("source-map-support").install();
 	module.exports = supportsHistory;
 
 /***/ },
-/* 61 */
+/* 62 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(70), __esModule: true };
+	module.exports = { "default": __webpack_require__(72), __esModule: true };
 
 /***/ },
-/* 62 */
+/* 63 */
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(73);
+	module.exports = __webpack_require__(64).core.Object.keys;
+
+/***/ },
+/* 64 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	var global = typeof self != 'undefined' ? self : Function('return this')()
+	  , core   = {}
+	  , defineProperty = Object.defineProperty
+	  , hasOwnProperty = {}.hasOwnProperty
+	  , ceil  = Math.ceil
+	  , floor = Math.floor
+	  , max   = Math.max
+	  , min   = Math.min;
+	// The engine works fine with descriptors? Thank's IE8 for his funny defineProperty.
+	var DESC = !!function(){
+	  try {
+	    return defineProperty({}, 'a', {get: function(){ return 2; }}).a == 2;
+	  } catch(e){ /* empty */ }
+	}();
+	var hide = createDefiner(1);
+	// 7.1.4 ToInteger
+	function toInteger(it){
+	  return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
+	}
+	function desc(bitmap, value){
+	  return {
+	    enumerable  : !(bitmap & 1),
+	    configurable: !(bitmap & 2),
+	    writable    : !(bitmap & 4),
+	    value       : value
+	  };
+	}
+	function simpleSet(object, key, value){
+	  object[key] = value;
+	  return object;
+	}
+	function createDefiner(bitmap){
+	  return DESC ? function(object, key, value){
+	    return $.setDesc(object, key, desc(bitmap, value));
+	  } : simpleSet;
+	}
+	
+	function isObject(it){
+	  return it !== null && (typeof it == 'object' || typeof it == 'function');
+	}
+	function isFunction(it){
+	  return typeof it == 'function';
+	}
+	function assertDefined(it){
+	  if(it == undefined)throw TypeError("Can't call method on  " + it);
+	  return it;
+	}
+	
+	var $ = module.exports = __webpack_require__(74)({
+	  g: global,
+	  core: core,
+	  html: global.document && document.documentElement,
+	  // http://jsperf.com/core-js-isobject
+	  isObject:   isObject,
+	  isFunction: isFunction,
+	  it: function(it){
+	    return it;
+	  },
+	  that: function(){
+	    return this;
+	  },
+	  // 7.1.4 ToInteger
+	  toInteger: toInteger,
+	  // 7.1.15 ToLength
+	  toLength: function(it){
+	    return it > 0 ? min(toInteger(it), 0x1fffffffffffff) : 0; // pow(2, 53) - 1 == 9007199254740991
+	  },
+	  toIndex: function(index, length){
+	    index = toInteger(index);
+	    return index < 0 ? max(index + length, 0) : min(index, length);
+	  },
+	  has: function(it, key){
+	    return hasOwnProperty.call(it, key);
+	  },
+	  create:     Object.create,
+	  getProto:   Object.getPrototypeOf,
+	  DESC:       DESC,
+	  desc:       desc,
+	  getDesc:    Object.getOwnPropertyDescriptor,
+	  setDesc:    defineProperty,
+	  setDescs:   Object.defineProperties,
+	  getKeys:    Object.keys,
+	  getNames:   Object.getOwnPropertyNames,
+	  getSymbols: Object.getOwnPropertySymbols,
+	  assertDefined: assertDefined,
+	  // Dummy, fix for not array-like ES3 string in es5 module
+	  ES5Object: Object,
+	  toObject: function(it){
+	    return $.ES5Object(assertDefined(it));
+	  },
+	  hide: hide,
+	  def: createDefiner(0),
+	  set: global.Symbol ? simpleSet : hide,
+	  mix: function(target, src){
+	    for(var key in src)hide(target, key, src[key]);
+	    return target;
+	  },
+	  each: [].forEach
+	});
+	/* eslint-disable no-undef */
+	if(typeof __e != 'undefined')__e = core;
+	if(typeof __g != 'undefined')__g = global;
+
+/***/ },
+/* 65 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -3721,7 +3874,7 @@ require("source-map-support").install();
 
 
 /***/ },
-/* 63 */
+/* 66 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -3780,7 +3933,7 @@ require("source-map-support").install();
 
 
 /***/ },
-/* 64 */
+/* 67 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -3828,7 +3981,7 @@ require("source-map-support").install();
 
 
 /***/ },
-/* 65 */
+/* 68 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -3844,7 +3997,7 @@ require("source-map-support").install();
 	
 	"use strict";
 	
-	var emptyFunction = __webpack_require__(71);
+	var emptyFunction = __webpack_require__(75);
 	
 	/**
 	 * Similar to invariant but only logs a warning if the condition is not met.
@@ -3893,139 +4046,31 @@ require("source-map-support").install();
 
 
 /***/ },
-/* 66 */
+/* 69 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-	var global = typeof self != 'undefined' ? self : Function('return this')()
-	  , core   = {}
-	  , defineProperty = Object.defineProperty
-	  , hasOwnProperty = {}.hasOwnProperty
-	  , ceil  = Math.ceil
-	  , floor = Math.floor
-	  , max   = Math.max
-	  , min   = Math.min;
-	// The engine works fine with descriptors? Thank's IE8 for his funny defineProperty.
-	var DESC = !!function(){
-	  try {
-	    return defineProperty({}, 'a', {get: function(){ return 2; }}).a == 2;
-	  } catch(e){ /* empty */ }
-	}();
-	var hide = createDefiner(1);
-	// 7.1.4 ToInteger
-	function toInteger(it){
-	  return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
-	}
-	function desc(bitmap, value){
-	  return {
-	    enumerable  : !(bitmap & 1),
-	    configurable: !(bitmap & 2),
-	    writable    : !(bitmap & 4),
-	    value       : value
-	  };
-	}
-	function simpleSet(object, key, value){
-	  object[key] = value;
-	  return object;
-	}
-	function createDefiner(bitmap){
-	  return DESC ? function(object, key, value){
-	    return $.setDesc(object, key, desc(bitmap, value));
-	  } : simpleSet;
-	}
-	
-	function isObject(it){
-	  return it !== null && (typeof it == 'object' || typeof it == 'function');
-	}
-	function isFunction(it){
-	  return typeof it == 'function';
-	}
-	function assertDefined(it){
-	  if(it == undefined)throw TypeError("Can't call method on  " + it);
-	  return it;
-	}
-	
-	var $ = module.exports = __webpack_require__(72)({
-	  g: global,
-	  core: core,
-	  html: global.document && document.documentElement,
-	  // http://jsperf.com/core-js-isobject
-	  isObject:   isObject,
-	  isFunction: isFunction,
-	  it: function(it){
-	    return it;
-	  },
-	  that: function(){
-	    return this;
-	  },
-	  // 7.1.4 ToInteger
-	  toInteger: toInteger,
-	  // 7.1.15 ToLength
-	  toLength: function(it){
-	    return it > 0 ? min(toInteger(it), 0x1fffffffffffff) : 0; // pow(2, 53) - 1 == 9007199254740991
-	  },
-	  toIndex: function(index, length){
-	    index = toInteger(index);
-	    return index < 0 ? max(index + length, 0) : min(index, length);
-	  },
-	  has: function(it, key){
-	    return hasOwnProperty.call(it, key);
-	  },
-	  create:     Object.create,
-	  getProto:   Object.getPrototypeOf,
-	  DESC:       DESC,
-	  desc:       desc,
-	  getDesc:    Object.getOwnPropertyDescriptor,
-	  setDesc:    defineProperty,
-	  setDescs:   Object.defineProperties,
-	  getKeys:    Object.keys,
-	  getNames:   Object.getOwnPropertyNames,
-	  getSymbols: Object.getOwnPropertySymbols,
-	  assertDefined: assertDefined,
-	  // Dummy, fix for not array-like ES3 string in es5 module
-	  ES5Object: Object,
-	  toObject: function(it){
-	    return $.ES5Object(assertDefined(it));
-	  },
-	  hide: hide,
-	  def: createDefiner(0),
-	  set: global.Symbol ? simpleSet : hide,
-	  mix: function(target, src){
-	    for(var key in src)hide(target, key, src[key]);
-	    return target;
-	  },
-	  each: [].forEach
-	});
-	/* eslint-disable no-undef */
-	if(typeof __e != 'undefined')__e = core;
-	if(typeof __g != 'undefined')__g = global;
-
-/***/ },
-/* 67 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var $ = __webpack_require__(66);
+	var $ = __webpack_require__(64);
 	module.exports = function create(P, D){
 	  return $.create(P, D);
 	};
 
 /***/ },
-/* 68 */
+/* 70 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var $ = __webpack_require__(66);
+	var $ = __webpack_require__(64);
 	module.exports = function defineProperties(T, D){
 	  return $.setDescs(T, D);
 	};
 
 /***/ },
-/* 69 */
+/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var invariant = __webpack_require__(63);
-	var canUseDOM = __webpack_require__(64).canUseDOM;
+	var invariant = __webpack_require__(66);
+	var canUseDOM = __webpack_require__(67).canUseDOM;
 	
 	/**
 	 * Returns the current scroll position of the window as { x, y }.
@@ -4042,108 +4087,21 @@ require("source-map-support").install();
 	module.exports = getWindowScrollPosition;
 
 /***/ },
-/* 70 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var $ = __webpack_require__(66);
-	__webpack_require__(75);
-	module.exports = function getOwnPropertyDescriptor(it, key){
-	  return $.getDesc(it, key);
-	};
-
-/***/ },
-/* 71 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Copyright 2013-2015, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule emptyFunction
-	 */
-	
-	function makeEmptyFunction(arg) {
-	  return function() {
-	    return arg;
-	  };
-	}
-	
-	/**
-	 * This function accepts and discards inputs; it has no side effects. This is
-	 * primarily useful idiomatically for overridable function endpoints which
-	 * always need to be callable, since JS lacks a null-call idiom ala Cocoa.
-	 */
-	function emptyFunction() {}
-	
-	emptyFunction.thatReturns = makeEmptyFunction;
-	emptyFunction.thatReturnsFalse = makeEmptyFunction(false);
-	emptyFunction.thatReturnsTrue = makeEmptyFunction(true);
-	emptyFunction.thatReturnsNull = makeEmptyFunction(null);
-	emptyFunction.thatReturnsThis = function() { return this; };
-	emptyFunction.thatReturnsArgument = function(arg) { return arg; };
-	
-	module.exports = emptyFunction;
-
-
-/***/ },
 /* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = function($){
-	  $.FW   = false;
-	  $.path = $.core;
-	  return $;
+	var $ = __webpack_require__(64);
+	__webpack_require__(73);
+	module.exports = function getOwnPropertyDescriptor(it, key){
+	  return $.getDesc(it, key);
 	};
 
 /***/ },
 /* 73 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-	
-	function ToObject(val) {
-		if (val == null) {
-			throw new TypeError('Object.assign cannot be called with null or undefined');
-		}
-	
-		return Object(val);
-	}
-	
-	module.exports = Object.assign || function (target, source) {
-		var from;
-		var keys;
-		var to = ToObject(target);
-	
-		for (var s = 1; s < arguments.length; s++) {
-			from = arguments[s];
-			keys = Object.keys(Object(from));
-	
-			for (var i = 0; i < keys.length; i++) {
-				to[keys[i]] = from[keys[i]];
-			}
-		}
-	
-		return to;
-	};
-
-
-/***/ },
-/* 74 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__(76);
-
-
-/***/ },
-/* 75 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var $        = __webpack_require__(66)
-	  , $def     = __webpack_require__(77)
+	var $        = __webpack_require__(64)
+	  , $def     = __webpack_require__(78)
 	  , isObject = $.isObject
 	  , toObject = $.toObject;
 	function wrapObjectMethod(METHOD, MODE){
@@ -4182,31 +4140,97 @@ require("source-map-support").install();
 	wrapObjectMethod('getOwnPropertyNames');
 
 /***/ },
+/* 74 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function($){
+	  $.FW   = false;
+	  $.path = $.core;
+	  return $;
+	};
+
+/***/ },
+/* 75 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright 2013-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule emptyFunction
+	 */
+	
+	function makeEmptyFunction(arg) {
+	  return function() {
+	    return arg;
+	  };
+	}
+	
+	/**
+	 * This function accepts and discards inputs; it has no side effects. This is
+	 * primarily useful idiomatically for overridable function endpoints which
+	 * always need to be callable, since JS lacks a null-call idiom ala Cocoa.
+	 */
+	function emptyFunction() {}
+	
+	emptyFunction.thatReturns = makeEmptyFunction;
+	emptyFunction.thatReturnsFalse = makeEmptyFunction(false);
+	emptyFunction.thatReturnsTrue = makeEmptyFunction(true);
+	emptyFunction.thatReturnsNull = makeEmptyFunction(null);
+	emptyFunction.thatReturnsThis = function() { return this; };
+	emptyFunction.thatReturnsArgument = function(arg) { return arg; };
+	
+	module.exports = emptyFunction;
+
+
+/***/ },
 /* 76 */
 /***/ function(module, exports, __webpack_require__) {
 
-	// Load modules
-	
-	var Stringify = __webpack_require__(78);
-	var Parse = __webpack_require__(79);
-	
-	
-	// Declare internals
-	
-	var internals = {};
-	
-	
-	module.exports = {
-	    stringify: Stringify,
-	    parse: Parse
-	};
+	module.exports = __webpack_require__(79);
 
 
 /***/ },
 /* 77 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var $          = __webpack_require__(66)
+	'use strict';
+	
+	function ToObject(val) {
+		if (val == null) {
+			throw new TypeError('Object.assign cannot be called with null or undefined');
+		}
+	
+		return Object(val);
+	}
+	
+	module.exports = Object.assign || function (target, source) {
+		var from;
+		var keys;
+		var to = ToObject(target);
+	
+		for (var s = 1; s < arguments.length; s++) {
+			from = arguments[s];
+			keys = Object.keys(Object(from));
+	
+			for (var i = 0; i < keys.length; i++) {
+				to[keys[i]] = from[keys[i]];
+			}
+		}
+	
+		return to;
+	};
+
+
+/***/ },
+/* 78 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var $          = __webpack_require__(64)
 	  , global     = $.g
 	  , core       = $.core
 	  , isFunction = $.isFunction;
@@ -4254,12 +4278,33 @@ require("source-map-support").install();
 	module.exports = $def;
 
 /***/ },
-/* 78 */
+/* 79 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Load modules
 	
-	var Utils = __webpack_require__(80);
+	var Stringify = __webpack_require__(80);
+	var Parse = __webpack_require__(81);
+	
+	
+	// Declare internals
+	
+	var internals = {};
+	
+	
+	module.exports = {
+	    stringify: Stringify,
+	    parse: Parse
+	};
+
+
+/***/ },
+/* 80 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// Load modules
+	
+	var Utils = __webpack_require__(82);
 	
 	
 	// Declare internals
@@ -4357,12 +4402,12 @@ require("source-map-support").install();
 
 
 /***/ },
-/* 79 */
+/* 81 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Load modules
 	
-	var Utils = __webpack_require__(80);
+	var Utils = __webpack_require__(82);
 	
 	
 	// Declare internals
@@ -4524,7 +4569,7 @@ require("source-map-support").install();
 
 
 /***/ },
-/* 80 */
+/* 82 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Load modules
@@ -4660,6 +4705,90 @@ require("source-map-support").install();
 	        obj.constructor.isBuffer(obj));
 	};
 
+
+/***/ },
+/* 83 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _Object$assign = __webpack_require__(84)["default"];
+	
+	exports["default"] = _Object$assign || function (target) {
+	  for (var i = 1; i < arguments.length; i++) {
+	    var source = arguments[i];
+	
+	    for (var key in source) {
+	      if (Object.prototype.hasOwnProperty.call(source, key)) {
+	        target[key] = source[key];
+	      }
+	    }
+	  }
+	
+	  return target;
+	};
+	
+	exports.__esModule = true;
+
+/***/ },
+/* 84 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(85), __esModule: true };
+
+/***/ },
+/* 85 */
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(86);
+	module.exports = __webpack_require__(64).core.Object.assign;
+
+/***/ },
+/* 86 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// 19.1.3.1 Object.assign(target, source)
+	var $def = __webpack_require__(78);
+	$def($def.S, 'Object', {assign: __webpack_require__(87)});
+
+/***/ },
+/* 87 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var $        = __webpack_require__(64)
+	  , enumKeys = __webpack_require__(88);
+	// 19.1.2.1 Object.assign(target, source, ...)
+	/* eslint-disable no-unused-vars */
+	module.exports = Object.assign || function assign(target, source){
+	/* eslint-enable no-unused-vars */
+	  var T = Object($.assertDefined(target))
+	    , l = arguments.length
+	    , i = 1;
+	  while(l > i){
+	    var S      = $.ES5Object(arguments[i++])
+	      , keys   = enumKeys(S)
+	      , length = keys.length
+	      , j      = 0
+	      , key;
+	    while(length > j)T[key = keys[j++]] = S[key];
+	  }
+	  return T;
+	};
+
+/***/ },
+/* 88 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var $ = __webpack_require__(64);
+	module.exports = function(it){
+	  var keys       = $.getKeys(it)
+	    , getDesc    = $.getDesc
+	    , getSymbols = $.getSymbols;
+	  if(getSymbols)$.each.call(getSymbols(it), function(key){
+	    if(getDesc(it, key).enumerable)keys.push(key);
+	  });
+	  return keys;
+	};
 
 /***/ }
 /******/ ]);
