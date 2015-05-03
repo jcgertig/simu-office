@@ -38,9 +38,12 @@ class Home extends React.Component {
       video.volume = 0;
     }
 
-    _.forEach(this.state.videos, (video) => {
+    var videos = this.state.videos;
+    var myOrder = _.findWhere(videos, { easyrtcid: easyrtc.myEasyRtcId }).order;
+    _.forEach(videos, (video) => {
       if (video.filled) {
-        var vol = (video.easyrtcid === easyrtc.myEasyrtcid)? 0 : (1 - 0.33*(video.order - 1));
+        var distance = Math.abs(myOrder - (video.order - 1));
+        var vol = (video.easyrtcid === easyrtc.myEasyrtcid)? 0 : (1 - 0.33*distance);
         this.refs[`video${video.easyrtcid}`].getDOMNode().volume = vol;
       }
     });
