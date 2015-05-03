@@ -389,11 +389,11 @@
 
 	'use strict';
 	
-	var _inherits = __webpack_require__(43)['default'];
+	var _inherits = __webpack_require__(42)['default'];
 	
-	var _createClass = __webpack_require__(45)['default'];
+	var _createClass = __webpack_require__(43)['default'];
 	
-	var _classCallCheck = __webpack_require__(46)['default'];
+	var _classCallCheck = __webpack_require__(44)['default'];
 	
 	var _Object$defineProperty = __webpack_require__(16)['default'];
 	
@@ -448,15 +448,15 @@
 
 	'use strict';
 	
-	var _extends = __webpack_require__(42)['default'];
+	var _extends = __webpack_require__(45)['default'];
 	
-	var _inherits = __webpack_require__(43)['default'];
+	var _inherits = __webpack_require__(42)['default'];
 	
-	var _get = __webpack_require__(44)['default'];
+	var _get = __webpack_require__(46)['default'];
 	
-	var _createClass = __webpack_require__(45)['default'];
+	var _createClass = __webpack_require__(43)['default'];
 	
-	var _classCallCheck = __webpack_require__(46)['default'];
+	var _classCallCheck = __webpack_require__(44)['default'];
 	
 	var _Object$defineProperty = __webpack_require__(16)['default'];
 	
@@ -524,9 +524,14 @@
 	        video.volume = 0;
 	      }
 	
-	      _import2['default'].forEach(this.state.videos, function (video) {
+	      var videos = this.state.videos;
+	      var me = _import2['default'].findWhere(videos, { easyrtcid: easyrtc.myEasyrtcid });
+	      console.log(me);
+	      var myOrder = me ? me.order : 0;
+	      _import2['default'].forEach(videos, function (video) {
 	        if (video.filled) {
-	          var vol = video.easyrtcid === easyrtc.myEasyrtcid ? 0 : 1 - 0.33 * (video.order - 1);
+	          var distance = Math.abs(myOrder - (video.order - 1));
+	          var vol = video.easyrtcid === easyrtc.myEasyrtcid ? 0 : Math.max(0, 1 - 0.33 * distance);
 	          _this.refs['video' + video.easyrtcid].getDOMNode().volume = vol;
 	        }
 	      });
@@ -766,11 +771,11 @@
 
 	'use strict';
 	
-	var _inherits = __webpack_require__(43)['default'];
+	var _inherits = __webpack_require__(42)['default'];
 	
-	var _createClass = __webpack_require__(45)['default'];
+	var _createClass = __webpack_require__(43)['default'];
 	
-	var _classCallCheck = __webpack_require__(46)['default'];
+	var _classCallCheck = __webpack_require__(44)['default'];
 	
 	var _Object$defineProperty = __webpack_require__(16)['default'];
 	
@@ -2995,30 +3000,6 @@
 
 	"use strict";
 	
-	var _Object$assign = __webpack_require__(63)["default"];
-	
-	exports["default"] = _Object$assign || function (target) {
-	  for (var i = 1; i < arguments.length; i++) {
-	    var source = arguments[i];
-	
-	    for (var key in source) {
-	      if (Object.prototype.hasOwnProperty.call(source, key)) {
-	        target[key] = source[key];
-	      }
-	    }
-	  }
-	
-	  return target;
-	};
-	
-	exports.__esModule = true;
-
-/***/ },
-/* 43 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
 	var _Object$create = __webpack_require__(50)["default"];
 	
 	exports["default"] = function (subClass, superClass) {
@@ -3040,12 +3021,79 @@
 	exports.__esModule = true;
 
 /***/ },
+/* 43 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _Object$defineProperty = __webpack_require__(16)["default"];
+	
+	exports["default"] = (function () {
+	  function defineProperties(target, props) {
+	    for (var i = 0; i < props.length; i++) {
+	      var descriptor = props[i];
+	      descriptor.enumerable = descriptor.enumerable || false;
+	      descriptor.configurable = true;
+	      if ("value" in descriptor) descriptor.writable = true;
+	
+	      _Object$defineProperty(target, descriptor.key, descriptor);
+	    }
+	  }
+	
+	  return function (Constructor, protoProps, staticProps) {
+	    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+	    if (staticProps) defineProperties(Constructor, staticProps);
+	    return Constructor;
+	  };
+	})();
+	
+	exports.__esModule = true;
+
+/***/ },
 /* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var _Object$getOwnPropertyDescriptor = __webpack_require__(64)["default"];
+	exports["default"] = function (instance, Constructor) {
+	  if (!(instance instanceof Constructor)) {
+	    throw new TypeError("Cannot call a class as a function");
+	  }
+	};
+	
+	exports.__esModule = true;
+
+/***/ },
+/* 45 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _Object$assign = __webpack_require__(63)["default"];
+	
+	exports["default"] = _Object$assign || function (target) {
+	  for (var i = 1; i < arguments.length; i++) {
+	    var source = arguments[i];
+	
+	    for (var key in source) {
+	      if (Object.prototype.hasOwnProperty.call(source, key)) {
+	        target[key] = source[key];
+	      }
+	    }
+	  }
+	
+	  return target;
+	};
+	
+	exports.__esModule = true;
+
+/***/ },
+/* 46 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _Object$getOwnPropertyDescriptor = __webpack_require__(65)["default"];
 	
 	exports["default"] = function get(_x, _x2, _x3) {
 	  var _again = true;
@@ -3088,53 +3136,10 @@
 	exports.__esModule = true;
 
 /***/ },
-/* 45 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var _Object$defineProperty = __webpack_require__(16)["default"];
-	
-	exports["default"] = (function () {
-	  function defineProperties(target, props) {
-	    for (var i = 0; i < props.length; i++) {
-	      var descriptor = props[i];
-	      descriptor.enumerable = descriptor.enumerable || false;
-	      descriptor.configurable = true;
-	      if ("value" in descriptor) descriptor.writable = true;
-	
-	      _Object$defineProperty(target, descriptor.key, descriptor);
-	    }
-	  }
-	
-	  return function (Constructor, protoProps, staticProps) {
-	    if (protoProps) defineProperties(Constructor.prototype, protoProps);
-	    if (staticProps) defineProperties(Constructor, staticProps);
-	    return Constructor;
-	  };
-	})();
-	
-	exports.__esModule = true;
-
-/***/ },
-/* 46 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	exports["default"] = function (instance, Constructor) {
-	  if (!(instance instanceof Constructor)) {
-	    throw new TypeError("Cannot call a class as a function");
-	  }
-	};
-	
-	exports.__esModule = true;
-
-/***/ },
 /* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(65), __esModule: true };
+	module.exports = { "default": __webpack_require__(64), __esModule: true };
 
 /***/ },
 /* 48 */
@@ -3784,20 +3789,20 @@
 /* 63 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(75), __esModule: true };
+	module.exports = { "default": __webpack_require__(74), __esModule: true };
 
 /***/ },
 /* 64 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(74), __esModule: true };
+	__webpack_require__(75);
+	module.exports = __webpack_require__(70).core.Object.keys;
 
 /***/ },
 /* 65 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(76);
-	module.exports = __webpack_require__(70).core.Object.keys;
+	module.exports = { "default": __webpack_require__(76), __esModule: true };
 
 /***/ },
 /* 66 */
@@ -4177,21 +4182,11 @@
 /* 74 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var $ = __webpack_require__(70);
-	__webpack_require__(76);
-	module.exports = function getOwnPropertyDescriptor(it, key){
-	  return $.getDesc(it, key);
-	};
-
-/***/ },
-/* 75 */
-/***/ function(module, exports, __webpack_require__) {
-
 	__webpack_require__(81);
 	module.exports = __webpack_require__(70).core.Object.assign;
 
 /***/ },
-/* 76 */
+/* 75 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var $        = __webpack_require__(70)
@@ -4232,6 +4227,16 @@
 	wrapObjectMethod('getPrototypeOf', 5);
 	wrapObjectMethod('keys');
 	wrapObjectMethod('getOwnPropertyNames');
+
+/***/ },
+/* 76 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var $ = __webpack_require__(70);
+	__webpack_require__(75);
+	module.exports = function getOwnPropertyDescriptor(it, key){
+	  return $.getDesc(it, key);
+	};
 
 /***/ },
 /* 77 */

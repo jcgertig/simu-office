@@ -39,7 +39,7 @@ class Home extends React.Component {
     }
 
     var videos = this.state.videos;
-    var me = _.findWhere(videos, { easyrtcid: easyrtc.myEasyRtcid });
+    var me = _.findWhere(videos, { easyrtcid: easyrtc.myEasyrtcid });
     var myOrder = me ? me.order : 0;
     _.forEach(videos, (video) => {
       if (video.filled) {
