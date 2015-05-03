@@ -6,9 +6,8 @@ function resources() {
 
   return `
     <link rel="stylesheet" href="/cdn/styles.css" />
-    <script async src="/cdn/client.js"></script>
+    <script async src="/cdn/main.js"></script>
   `.trim();
 }
 
 export var resources = resources;
-
