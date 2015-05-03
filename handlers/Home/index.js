@@ -16,8 +16,8 @@ class Home extends React.Component {
   constructor() {
     super();
     this.state = {
-      maxSlots: 4,
-      availableSlots: 4,
+      maxSlots: 8,
+      availableSlots: 8,
       videos: [{ filled: false, order: 0 }],
       name: '',
       others: []
@@ -40,8 +40,8 @@ class Home extends React.Component {
 
     _.forEach(this.state.videos, (video) => {
       if (video.filled) {
-        var vol = (video.easyrtcid === easyrtc.myEasyrtcid)? 0 : (1 - 0.33*parseInt(video.order - 1));
-        this.refs[`video${video.easyrtcid}`].volume = vol;
+        var vol = (video.easyrtcid === easyrtc.myEasyrtcid)? 0 : (1 - 0.33*(video.order - 1));
+        this.refs[`video${video.easyrtcid}`].getDOMNode().volume = vol;
       }
     });
   }
@@ -85,6 +85,22 @@ class Home extends React.Component {
 
   messageListener(easyrtcid, msgType, content): ?void {
     console.log(easyrtcid, msgType, content);
+
+    if (msgType === "reorder") {
+      var videos = this.state.videos;
+      var foundVideo = _.findWhere(videos, { easyrtcid: easyrtcid });
+      var newOrder = parseInt(content, 10);
+      var currentVideo = _.findWhere(videos, { order: newOrder });
+      var oldOrder = foundVideo.order;
+      var indexOfOld =  _.indexOf(videos, currentVideo);
+      var indexOfNew = _.indexOf(videos, foundVideo);
+      currentVideo.order = oldOrder;
+      foundVideo.order = newOrder;
+      videos[indexOfNew] = foundVideo;
+      videos[indexOfOld] = currentVideo;
+
+      this.setState({ videos });
+    }
   }
 
   establishConnection(list, position, connectCount): ?void {
@@ -106,6 +122,14 @@ class Home extends React.Component {
 
   callEverybodyElse(roomName, otherPeople, myInfo): ?void {
     easyrtc.setRoomOccupantListener(null); // so we're only called once.
+    easyrtc.setRoomOccupantListener((roomName, otherPeople, myInfo) => {
+      var others = [];
+      for (var easyrtcid in otherPeople) {
+        others.push(easyrtcid);
+      }
+
+      this.setState({ others });
+    });
 
     var list = [];
     for (var easyrtcid in otherPeople) {
@@ -162,6 +186,14 @@ class Home extends React.Component {
         oldVideo.order = oldOrder;
         videos[indexOfNew] = foundVideo;
         videos[indexOfOld] = oldVideo;
+
+        for( var index in this.state.others ) {
+          var id = this.state.others[index];
+          if( id && id != "") {
+            easyrtc.sendPeerMessage(id, "reorder",  order);
+          }
+        }
+
         this.setState({ videos });
       }
     }
