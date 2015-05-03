@@ -89,18 +89,18 @@ class Home extends React.Component {
 
   establishConnection(list, position, connectCount): ?void {
     var maxSlots = this.state.maxSlots;
-    function callSuccess() {
+    var callSuccess = () => {
       connectCount++;
       if (connectCount < maxSlots && position > 0) {
         this.establishConnection.bind(this)(list, position-1, connectCount);
       }
-    }
-    function callFailure(errorCode, errorText) {
+    };
+    var callFailure = (errorCode, errorText) => {
       easyrtc.showError(errorCode, errorText);
       if (connectCount < maxSlots && position > 0) {
         this.establishConnection.bind(this)(list, position-1, connectCount);
       }
-    }
+    };
     easyrtc.call(list[position], callSuccess, callFailure);
   }
 
