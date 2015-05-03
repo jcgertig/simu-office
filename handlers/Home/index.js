@@ -43,7 +43,7 @@ class Home extends React.Component {
     var myOrder = me ? me.order : 0;
     _.forEach(videos, (video) => {
       if (video.filled) {
-        var distance = Math.abs(myOrder - (video.order - 1));
+        var distance = Math.abs(myOrder - video.order) - 1;
         var vol = (video.easyrtcid === easyrtc.myEasyrtcid)? 0 : Math.max(0, 1 - 0.33*distance);
         this.refs[`video${video.easyrtcid}`].getDOMNode().volume = vol;
       }
