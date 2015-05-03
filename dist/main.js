@@ -1,4 +1,3 @@
-require("source-map-support").install();
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -57,7 +56,7 @@ require("source-map-support").install();
 	
 	var _React2 = _interopRequireDefault(_React);
 	
-	var _Router = __webpack_require__(15);
+	var _Router = __webpack_require__(19);
 	
 	var _Router2 = _interopRequireDefault(_Router);
 	
@@ -276,7 +275,7 @@ require("source-map-support").install();
 
 	'use strict';
 	
-	var _Object$defineProperty = __webpack_require__(16)['default'];
+	var _Object$defineProperty = __webpack_require__(15)['default'];
 	
 	var _interopRequireDefault = __webpack_require__(12)['default'];
 	
@@ -290,19 +289,19 @@ require("source-map-support").install();
 	
 	var _React2 = _interopRequireDefault(_React);
 	
-	var _Router = __webpack_require__(15);
+	var _Router = __webpack_require__(19);
 	
 	var _Router2 = _interopRequireDefault(_Router);
 	
-	var _App = __webpack_require__(17);
+	var _App = __webpack_require__(16);
 	
 	var _App2 = _interopRequireDefault(_App);
 	
-	var _Home = __webpack_require__(18);
+	var _Home = __webpack_require__(17);
 	
 	var _Home2 = _interopRequireDefault(_Home);
 	
-	var _NotFound = __webpack_require__(19);
+	var _NotFound = __webpack_require__(18);
 	
 	var _NotFound2 = _interopRequireDefault(_NotFound);
 	
@@ -326,7 +325,7 @@ require("source-map-support").install();
 
 	'use strict';
 	
-	var _Object$defineProperty = __webpack_require__(16)['default'];
+	var _Object$defineProperty = __webpack_require__(15)['default'];
 	
 	_Object$defineProperty(exports, '__esModule', {
 	  value: true
@@ -334,11 +333,11 @@ require("source-map-support").install();
 	
 	// TODO(dlk): extract this info from webpack’s stats file
 	function resources() {
-	  if (true) {
+	  if (false) {
 	    return '<script async src="//localhost:4001/dist/client.js"></script>';
 	  }
 	
-	  return '\n    <link rel="stylesheet" href="/cdn/styles.css" />\n    <script async src="/cdn/client.js"></script>\n  '.trim();
+	  return '\n    <link rel="stylesheet" href="/cdn/styles.css" />\n    <script async src="/cdn/main.js"></script>\n  '.trim();
 	}
 	
 	var resources = resources;
@@ -348,55 +347,21 @@ require("source-map-support").install();
 /* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
-	
-	exports.DefaultRoute = __webpack_require__(22);
-	exports.Link = __webpack_require__(23);
-	exports.NotFoundRoute = __webpack_require__(24);
-	exports.Redirect = __webpack_require__(25);
-	exports.Route = __webpack_require__(26);
-	exports.RouteHandler = __webpack_require__(27);
-	
-	exports.HashLocation = __webpack_require__(28);
-	exports.HistoryLocation = __webpack_require__(29);
-	exports.RefreshLocation = __webpack_require__(30);
-	exports.StaticLocation = __webpack_require__(31);
-	exports.TestLocation = __webpack_require__(32);
-	
-	exports.ImitateBrowserBehavior = __webpack_require__(33);
-	exports.ScrollToTopBehavior = __webpack_require__(34);
-	
-	exports.History = __webpack_require__(35);
-	exports.Navigation = __webpack_require__(36);
-	exports.State = __webpack_require__(37);
-	
-	exports.createRoute = __webpack_require__(38).createRoute;
-	exports.createDefaultRoute = __webpack_require__(38).createDefaultRoute;
-	exports.createNotFoundRoute = __webpack_require__(38).createNotFoundRoute;
-	exports.createRedirect = __webpack_require__(38).createRedirect;
-	exports.createRoutesFromReactChildren = __webpack_require__(39);
-	exports.create = __webpack_require__(40);
-	exports.run = __webpack_require__(41);
+	module.exports = { "default": __webpack_require__(28), __esModule: true };
 
 /***/ },
 /* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(48), __esModule: true };
-
-/***/ },
-/* 17 */
-/***/ function(module, exports, __webpack_require__) {
-
 	'use strict';
 	
-	var _inherits = __webpack_require__(42)['default'];
+	var _inherits = __webpack_require__(22)['default'];
 	
-	var _createClass = __webpack_require__(43)['default'];
+	var _createClass = __webpack_require__(23)['default'];
 	
-	var _classCallCheck = __webpack_require__(44)['default'];
+	var _classCallCheck = __webpack_require__(24)['default'];
 	
-	var _Object$defineProperty = __webpack_require__(16)['default'];
+	var _Object$defineProperty = __webpack_require__(15)['default'];
 	
 	var _interopRequireDefault = __webpack_require__(12)['default'];
 	
@@ -408,12 +373,12 @@ require("source-map-support").install();
 	
 	var _React2 = _interopRequireDefault(_React);
 	
-	var _RouteHandler = __webpack_require__(15);
+	var _RouteHandler = __webpack_require__(19);
 	
 	/** @flow */
 	'use strict';
 	
-	__webpack_require__(49);
+	__webpack_require__(29);
 	
 	var AppBase = (function (_React$Component) {
 	  function AppBase() {
@@ -444,24 +409,24 @@ require("source-map-support").install();
 	module.exports = exports['default'];
 
 /***/ },
-/* 18 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var _extends = __webpack_require__(45)['default'];
+	var _extends = __webpack_require__(25)['default'];
 	
-	var _inherits = __webpack_require__(42)['default'];
+	var _inherits = __webpack_require__(22)['default'];
 	
-	var _get = __webpack_require__(46)['default'];
+	var _get = __webpack_require__(26)['default'];
 	
-	var _createClass = __webpack_require__(43)['default'];
+	var _createClass = __webpack_require__(23)['default'];
 	
-	var _classCallCheck = __webpack_require__(44)['default'];
+	var _classCallCheck = __webpack_require__(24)['default'];
 	
-	var _Object$defineProperty = __webpack_require__(16)['default'];
+	var _Object$defineProperty = __webpack_require__(15)['default'];
 	
-	var _Object$keys = __webpack_require__(47)['default'];
+	var _Object$keys = __webpack_require__(27)['default'];
 	
 	var _interopRequireDefault = __webpack_require__(12)['default'];
 	
@@ -487,7 +452,7 @@ require("source-map-support").install();
 	/* global navigator, io, easyrtc */
 	'use strict';
 	
-	__webpack_require__(49);
+	__webpack_require__(29);
 	
 	var socketio;
 	
@@ -700,18 +665,18 @@ require("source-map-support").install();
 	*/
 
 /***/ },
-/* 19 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var _inherits = __webpack_require__(42)['default'];
+	var _inherits = __webpack_require__(22)['default'];
 	
-	var _createClass = __webpack_require__(43)['default'];
+	var _createClass = __webpack_require__(23)['default'];
 	
-	var _classCallCheck = __webpack_require__(44)['default'];
+	var _classCallCheck = __webpack_require__(24)['default'];
 	
-	var _Object$defineProperty = __webpack_require__(16)['default'];
+	var _Object$defineProperty = __webpack_require__(15)['default'];
 	
 	var _interopRequireDefault = __webpack_require__(12)['default'];
 	
@@ -723,12 +688,12 @@ require("source-map-support").install();
 	
 	var _React2 = _interopRequireDefault(_React);
 	
-	var _RouteHandler = __webpack_require__(15);
+	var _RouteHandler = __webpack_require__(19);
 	
 	/** @flow */
 	'use strict';
 	
-	__webpack_require__(49);
+	__webpack_require__(29);
 	
 	var NotFound = (function (_React$Component) {
 	  function NotFound() {
@@ -760,6 +725,40 @@ require("source-map-support").install();
 	module.exports = exports['default'];
 
 /***/ },
+/* 19 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	exports.DefaultRoute = __webpack_require__(30);
+	exports.Link = __webpack_require__(31);
+	exports.NotFoundRoute = __webpack_require__(32);
+	exports.Redirect = __webpack_require__(33);
+	exports.Route = __webpack_require__(34);
+	exports.RouteHandler = __webpack_require__(35);
+	
+	exports.HashLocation = __webpack_require__(36);
+	exports.HistoryLocation = __webpack_require__(37);
+	exports.RefreshLocation = __webpack_require__(38);
+	exports.StaticLocation = __webpack_require__(39);
+	exports.TestLocation = __webpack_require__(40);
+	
+	exports.ImitateBrowserBehavior = __webpack_require__(41);
+	exports.ScrollToTopBehavior = __webpack_require__(42);
+	
+	exports.History = __webpack_require__(43);
+	exports.Navigation = __webpack_require__(44);
+	exports.State = __webpack_require__(45);
+	
+	exports.createRoute = __webpack_require__(46).createRoute;
+	exports.createDefaultRoute = __webpack_require__(46).createDefaultRoute;
+	exports.createNotFoundRoute = __webpack_require__(46).createNotFoundRoute;
+	exports.createRedirect = __webpack_require__(46).createRedirect;
+	exports.createRoutesFromReactChildren = __webpack_require__(47);
+	exports.create = __webpack_require__(48);
+	exports.run = __webpack_require__(49);
+
+/***/ },
 /* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -779,6 +778,171 @@ require("source-map-support").install();
 	
 	var _Object$create = __webpack_require__(50)["default"];
 	
+	exports["default"] = function (subClass, superClass) {
+	  if (typeof superClass !== "function" && superClass !== null) {
+	    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+	  }
+	
+	  subClass.prototype = _Object$create(superClass && superClass.prototype, {
+	    constructor: {
+	      value: subClass,
+	      enumerable: false,
+	      writable: true,
+	      configurable: true
+	    }
+	  });
+	  if (superClass) subClass.__proto__ = superClass;
+	};
+	
+	exports.__esModule = true;
+
+/***/ },
+/* 23 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _Object$defineProperty = __webpack_require__(15)["default"];
+	
+	exports["default"] = (function () {
+	  function defineProperties(target, props) {
+	    for (var i = 0; i < props.length; i++) {
+	      var descriptor = props[i];
+	      descriptor.enumerable = descriptor.enumerable || false;
+	      descriptor.configurable = true;
+	      if ("value" in descriptor) descriptor.writable = true;
+	
+	      _Object$defineProperty(target, descriptor.key, descriptor);
+	    }
+	  }
+	
+	  return function (Constructor, protoProps, staticProps) {
+	    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+	    if (staticProps) defineProperties(Constructor, staticProps);
+	    return Constructor;
+	  };
+	})();
+	
+	exports.__esModule = true;
+
+/***/ },
+/* 24 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	exports["default"] = function (instance, Constructor) {
+	  if (!(instance instanceof Constructor)) {
+	    throw new TypeError("Cannot call a class as a function");
+	  }
+	};
+	
+	exports.__esModule = true;
+
+/***/ },
+/* 25 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _Object$assign = __webpack_require__(51)["default"];
+	
+	exports["default"] = _Object$assign || function (target) {
+	  for (var i = 1; i < arguments.length; i++) {
+	    var source = arguments[i];
+	
+	    for (var key in source) {
+	      if (Object.prototype.hasOwnProperty.call(source, key)) {
+	        target[key] = source[key];
+	      }
+	    }
+	  }
+	
+	  return target;
+	};
+	
+	exports.__esModule = true;
+
+/***/ },
+/* 26 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _Object$getOwnPropertyDescriptor = __webpack_require__(53)["default"];
+	
+	exports["default"] = function get(_x, _x2, _x3) {
+	  var _again = true;
+	
+	  _function: while (_again) {
+	    desc = parent = getter = undefined;
+	    _again = false;
+	    var object = _x,
+	        property = _x2,
+	        receiver = _x3;
+	
+	    var desc = _Object$getOwnPropertyDescriptor(object, property);
+	
+	    if (desc === undefined) {
+	      var parent = Object.getPrototypeOf(object);
+	
+	      if (parent === null) {
+	        return undefined;
+	      } else {
+	        _x = parent;
+	        _x2 = property;
+	        _x3 = receiver;
+	        _again = true;
+	        continue _function;
+	      }
+	    } else if ("value" in desc) {
+	      return desc.value;
+	    } else {
+	      var getter = desc.get;
+	
+	      if (getter === undefined) {
+	        return undefined;
+	      }
+	
+	      return getter.call(receiver);
+	    }
+	  }
+	};
+	
+	exports.__esModule = true;
+
+/***/ },
+/* 27 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(52), __esModule: true };
+
+/***/ },
+/* 28 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var $ = __webpack_require__(54);
+	module.exports = function defineProperty(it, key, desc){
+	  return $.setDesc(it, key, desc);
+	};
+
+/***/ },
+/* 29 */
+/***/ function(module, exports, __webpack_require__) {
+
+	(function(exports) {
+	  exports.noop = function(){};
+	})(typeof module === 'object' && typeof module.exports === 'object' ? module.exports : window);
+
+
+/***/ },
+/* 30 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _Object$create = __webpack_require__(50)["default"];
+	
 	var _inherits = function _inherits(subClass, superClass) {
 	  if (typeof superClass !== "function" && superClass !== null) {
 	    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
@@ -791,9 +955,9 @@ require("source-map-support").install();
 	  }
 	};
 	
-	var PropTypes = __webpack_require__(51);
-	var RouteHandler = __webpack_require__(27);
-	var Route = __webpack_require__(26);
+	var PropTypes = __webpack_require__(55);
+	var RouteHandler = __webpack_require__(35);
+	var Route = __webpack_require__(34);
 	
 	/**
 	 * A <DefaultRoute> component is a special kind of <Route> that
@@ -834,12 +998,12 @@ require("source-map-support").install();
 	module.exports = DefaultRoute;
 
 /***/ },
-/* 23 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var _Object$defineProperties = __webpack_require__(52)["default"];
+	var _Object$defineProperties = __webpack_require__(56)["default"];
 	
 	var _Object$create = __webpack_require__(50)["default"];
 	
@@ -866,8 +1030,8 @@ require("source-map-support").install();
 	};
 	
 	var React = __webpack_require__(2);
-	var assign = __webpack_require__(64);
-	var PropTypes = __webpack_require__(51);
+	var assign = __webpack_require__(67);
+	var PropTypes = __webpack_require__(55);
 	
 	function isLeftClickEvent(event) {
 	  return event.button === 0;
@@ -997,7 +1161,7 @@ require("source-map-support").install();
 	module.exports = Link;
 
 /***/ },
-/* 24 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1016,9 +1180,9 @@ require("source-map-support").install();
 	  }
 	};
 	
-	var PropTypes = __webpack_require__(51);
-	var RouteHandler = __webpack_require__(27);
-	var Route = __webpack_require__(26);
+	var PropTypes = __webpack_require__(55);
+	var RouteHandler = __webpack_require__(35);
+	var Route = __webpack_require__(34);
 	
 	/**
 	 * A <NotFoundRoute> is a special kind of <Route> that
@@ -1060,7 +1224,7 @@ require("source-map-support").install();
 	module.exports = NotFoundRoute;
 
 /***/ },
-/* 25 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1079,8 +1243,8 @@ require("source-map-support").install();
 	  }
 	};
 	
-	var PropTypes = __webpack_require__(51);
-	var Route = __webpack_require__(26);
+	var PropTypes = __webpack_require__(55);
+	var Route = __webpack_require__(34);
 	
 	/**
 	 * A <Redirect> component is a special kind of <Route> that always
@@ -1118,12 +1282,12 @@ require("source-map-support").install();
 	module.exports = Redirect;
 
 /***/ },
-/* 26 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var _Object$defineProperties = __webpack_require__(52)["default"];
+	var _Object$defineProperties = __webpack_require__(56)["default"];
 	
 	var _Object$create = __webpack_require__(50)["default"];
 	
@@ -1150,9 +1314,9 @@ require("source-map-support").install();
 	};
 	
 	var React = __webpack_require__(2);
-	var invariant = __webpack_require__(65);
-	var PropTypes = __webpack_require__(51);
-	var RouteHandler = __webpack_require__(27);
+	var invariant = __webpack_require__(68);
+	var PropTypes = __webpack_require__(55);
+	var RouteHandler = __webpack_require__(35);
 	
 	/**
 	 * <Route> components specify components that are rendered to the page when the
@@ -1235,12 +1399,12 @@ require("source-map-support").install();
 	module.exports = Route;
 
 /***/ },
-/* 27 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var _Object$defineProperties = __webpack_require__(52)["default"];
+	var _Object$defineProperties = __webpack_require__(56)["default"];
 	
 	var _Object$create = __webpack_require__(50)["default"];
 	
@@ -1267,9 +1431,9 @@ require("source-map-support").install();
 	};
 	
 	var React = __webpack_require__(2);
-	var ContextWrapper = __webpack_require__(53);
-	var assign = __webpack_require__(64);
-	var PropTypes = __webpack_require__(51);
+	var ContextWrapper = __webpack_require__(57);
+	var assign = __webpack_require__(67);
+	var PropTypes = __webpack_require__(55);
 	
 	var REF_NAME = "__routeHandler__";
 	
@@ -1356,13 +1520,13 @@ require("source-map-support").install();
 	module.exports = RouteHandler;
 
 /***/ },
-/* 28 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var LocationActions = __webpack_require__(54);
-	var History = __webpack_require__(35);
+	var LocationActions = __webpack_require__(58);
+	var History = __webpack_require__(43);
 	
 	var _listeners = [];
 	var _isListening = false;
@@ -1472,13 +1636,13 @@ require("source-map-support").install();
 	module.exports = HashLocation;
 
 /***/ },
-/* 29 */
+/* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var LocationActions = __webpack_require__(54);
-	var History = __webpack_require__(35);
+	var LocationActions = __webpack_require__(58);
+	var History = __webpack_require__(43);
 	
 	var _listeners = [];
 	var _isListening = false;
@@ -1563,13 +1727,13 @@ require("source-map-support").install();
 	module.exports = HistoryLocation;
 
 /***/ },
-/* 30 */
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var HistoryLocation = __webpack_require__(29);
-	var History = __webpack_require__(35);
+	var HistoryLocation = __webpack_require__(37);
+	var History = __webpack_require__(43);
 	
 	/**
 	 * A Location that uses full page refreshes. This is used as
@@ -1599,12 +1763,12 @@ require("source-map-support").install();
 	module.exports = RefreshLocation;
 
 /***/ },
-/* 31 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var _Object$defineProperties = __webpack_require__(52)["default"];
+	var _Object$defineProperties = __webpack_require__(56)["default"];
 	
 	var _createClass = (function () {
 	  function defineProperties(target, props) {
@@ -1622,7 +1786,7 @@ require("source-map-support").install();
 	  }
 	};
 	
-	var invariant = __webpack_require__(65);
+	var invariant = __webpack_require__(68);
 	
 	function throwCannotModify() {
 	  invariant(false, "You cannot modify a static location");
@@ -1668,12 +1832,12 @@ require("source-map-support").install();
 	module.exports = StaticLocation;
 
 /***/ },
-/* 32 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var _Object$defineProperties = __webpack_require__(52)["default"];
+	var _Object$defineProperties = __webpack_require__(56)["default"];
 	
 	var _createClass = (function () {
 	  function defineProperties(target, props) {
@@ -1691,9 +1855,9 @@ require("source-map-support").install();
 	  }
 	};
 	
-	var invariant = __webpack_require__(65);
-	var LocationActions = __webpack_require__(54);
-	var History = __webpack_require__(35);
+	var invariant = __webpack_require__(68);
+	var LocationActions = __webpack_require__(58);
+	var History = __webpack_require__(43);
 	
 	/**
 	 * A location that is convenient for testing and does not require a DOM.
@@ -1782,12 +1946,12 @@ require("source-map-support").install();
 	module.exports = TestLocation;
 
 /***/ },
-/* 33 */
+/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var LocationActions = __webpack_require__(54);
+	var LocationActions = __webpack_require__(58);
 	
 	/**
 	 * A scroll behavior that attempts to imitate the default behavior
@@ -1816,7 +1980,7 @@ require("source-map-support").install();
 	module.exports = ImitateBrowserBehavior;
 
 /***/ },
-/* 34 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1836,13 +2000,13 @@ require("source-map-support").install();
 	module.exports = ScrollToTopBehavior;
 
 /***/ },
-/* 35 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var invariant = __webpack_require__(65);
-	var canUseDOM = __webpack_require__(67).canUseDOM;
+	var invariant = __webpack_require__(68);
+	var canUseDOM = __webpack_require__(69).canUseDOM;
 	
 	var History = {
 	
@@ -1871,13 +2035,13 @@ require("source-map-support").install();
 	module.exports = History;
 
 /***/ },
-/* 36 */
+/* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var warning = __webpack_require__(66);
-	var PropTypes = __webpack_require__(51);
+	var warning = __webpack_require__(70);
+	var PropTypes = __webpack_require__(55);
 	
 	function deprecatedMethod(routerMethodName, fn) {
 	  return function () {
@@ -1955,13 +2119,13 @@ require("source-map-support").install();
 	module.exports = Navigation;
 
 /***/ },
-/* 37 */
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var warning = __webpack_require__(66);
-	var PropTypes = __webpack_require__(51);
+	var warning = __webpack_require__(70);
+	var PropTypes = __webpack_require__(55);
 	
 	function deprecatedMethod(routerMethodName, fn) {
 	  return function () {
@@ -2043,12 +2207,12 @@ require("source-map-support").install();
 	module.exports = State;
 
 /***/ },
-/* 38 */
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var _Object$defineProperties = __webpack_require__(52)["default"];
+	var _Object$defineProperties = __webpack_require__(56)["default"];
 	
 	var _createClass = (function () {
 	  function defineProperties(target, props) {
@@ -2066,10 +2230,10 @@ require("source-map-support").install();
 	  }
 	};
 	
-	var assign = __webpack_require__(64);
-	var invariant = __webpack_require__(65);
-	var warning = __webpack_require__(66);
-	var PathUtils = __webpack_require__(55);
+	var assign = __webpack_require__(67);
+	var invariant = __webpack_require__(68);
+	var warning = __webpack_require__(70);
+	var PathUtils = __webpack_require__(59);
 	
 	var _currentRoute;
 	
@@ -2269,19 +2433,19 @@ require("source-map-support").install();
 	module.exports = Route;
 
 /***/ },
-/* 39 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	/* jshint -W084 */
 	var React = __webpack_require__(2);
-	var assign = __webpack_require__(64);
-	var warning = __webpack_require__(66);
-	var DefaultRoute = __webpack_require__(22);
-	var NotFoundRoute = __webpack_require__(24);
-	var Redirect = __webpack_require__(25);
-	var Route = __webpack_require__(38);
+	var assign = __webpack_require__(67);
+	var warning = __webpack_require__(70);
+	var DefaultRoute = __webpack_require__(30);
+	var NotFoundRoute = __webpack_require__(32);
+	var Redirect = __webpack_require__(33);
+	var Route = __webpack_require__(46);
 	
 	function checkPropTypes(componentName, propTypes, props) {
 	  componentName = componentName || "UnknownComponent";
@@ -2355,34 +2519,34 @@ require("source-map-support").install();
 	module.exports = createRoutesFromReactChildren;
 
 /***/ },
-/* 40 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	/* jshint -W058 */
 	var React = __webpack_require__(2);
-	var warning = __webpack_require__(66);
-	var invariant = __webpack_require__(65);
-	var canUseDOM = __webpack_require__(67).canUseDOM;
-	var LocationActions = __webpack_require__(54);
-	var ImitateBrowserBehavior = __webpack_require__(33);
-	var HashLocation = __webpack_require__(28);
-	var HistoryLocation = __webpack_require__(29);
-	var RefreshLocation = __webpack_require__(30);
-	var StaticLocation = __webpack_require__(31);
-	var ScrollHistory = __webpack_require__(56);
-	var createRoutesFromReactChildren = __webpack_require__(39);
-	var isReactChildren = __webpack_require__(57);
-	var Transition = __webpack_require__(58);
-	var PropTypes = __webpack_require__(51);
-	var Redirect = __webpack_require__(59);
-	var History = __webpack_require__(35);
-	var Cancellation = __webpack_require__(60);
-	var Match = __webpack_require__(61);
-	var Route = __webpack_require__(38);
-	var supportsHistory = __webpack_require__(62);
-	var PathUtils = __webpack_require__(55);
+	var warning = __webpack_require__(70);
+	var invariant = __webpack_require__(68);
+	var canUseDOM = __webpack_require__(69).canUseDOM;
+	var LocationActions = __webpack_require__(58);
+	var ImitateBrowserBehavior = __webpack_require__(41);
+	var HashLocation = __webpack_require__(36);
+	var HistoryLocation = __webpack_require__(37);
+	var RefreshLocation = __webpack_require__(38);
+	var StaticLocation = __webpack_require__(39);
+	var ScrollHistory = __webpack_require__(60);
+	var createRoutesFromReactChildren = __webpack_require__(47);
+	var isReactChildren = __webpack_require__(61);
+	var Transition = __webpack_require__(62);
+	var PropTypes = __webpack_require__(55);
+	var Redirect = __webpack_require__(63);
+	var History = __webpack_require__(43);
+	var Cancellation = __webpack_require__(64);
+	var Match = __webpack_require__(65);
+	var Route = __webpack_require__(46);
+	var supportsHistory = __webpack_require__(66);
+	var PathUtils = __webpack_require__(59);
 	
 	/**
 	 * The default location for new routers.
@@ -2486,7 +2650,7 @@ require("source-map-support").install();
 	  if (typeof location === "string") location = new StaticLocation(location);
 	
 	  if (location instanceof StaticLocation) {
-	    warning(!canUseDOM || ("development") === "test", "You should not use a static location in a DOM environment because " + "the router will not be kept in sync with the current URL");
+	    warning(!canUseDOM || ("production") === "test", "You should not use a static location in a DOM environment because " + "the router will not be kept in sync with the current URL");
 	  } else {
 	    invariant(canUseDOM || location.needsDOM === false, "You cannot use %s without a DOM", location);
 	  }
@@ -2874,12 +3038,12 @@ require("source-map-support").install();
 	module.exports = createRouter;
 
 /***/ },
-/* 41 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var createRouter = __webpack_require__(40);
+	var createRouter = __webpack_require__(48);
 	
 	/**
 	 * A high-level convenience method that creates, configures, and
@@ -2929,185 +3093,147 @@ require("source-map-support").install();
 	module.exports = runRouter;
 
 /***/ },
-/* 42 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var _Object$create = __webpack_require__(50)["default"];
-	
-	exports["default"] = function (subClass, superClass) {
-	  if (typeof superClass !== "function" && superClass !== null) {
-	    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-	  }
-	
-	  subClass.prototype = _Object$create(superClass && superClass.prototype, {
-	    constructor: {
-	      value: subClass,
-	      enumerable: false,
-	      writable: true,
-	      configurable: true
-	    }
-	  });
-	  if (superClass) subClass.__proto__ = superClass;
-	};
-	
-	exports.__esModule = true;
-
-/***/ },
-/* 43 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var _Object$defineProperty = __webpack_require__(16)["default"];
-	
-	exports["default"] = (function () {
-	  function defineProperties(target, props) {
-	    for (var i = 0; i < props.length; i++) {
-	      var descriptor = props[i];
-	      descriptor.enumerable = descriptor.enumerable || false;
-	      descriptor.configurable = true;
-	      if ("value" in descriptor) descriptor.writable = true;
-	
-	      _Object$defineProperty(target, descriptor.key, descriptor);
-	    }
-	  }
-	
-	  return function (Constructor, protoProps, staticProps) {
-	    if (protoProps) defineProperties(Constructor.prototype, protoProps);
-	    if (staticProps) defineProperties(Constructor, staticProps);
-	    return Constructor;
-	  };
-	})();
-	
-	exports.__esModule = true;
-
-/***/ },
-/* 44 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	exports["default"] = function (instance, Constructor) {
-	  if (!(instance instanceof Constructor)) {
-	    throw new TypeError("Cannot call a class as a function");
-	  }
-	};
-	
-	exports.__esModule = true;
-
-/***/ },
-/* 45 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var _Object$assign = __webpack_require__(68)["default"];
-	
-	exports["default"] = _Object$assign || function (target) {
-	  for (var i = 1; i < arguments.length; i++) {
-	    var source = arguments[i];
-	
-	    for (var key in source) {
-	      if (Object.prototype.hasOwnProperty.call(source, key)) {
-	        target[key] = source[key];
-	      }
-	    }
-	  }
-	
-	  return target;
-	};
-	
-	exports.__esModule = true;
-
-/***/ },
-/* 46 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var _Object$getOwnPropertyDescriptor = __webpack_require__(69)["default"];
-	
-	exports["default"] = function get(_x, _x2, _x3) {
-	  var _again = true;
-	
-	  _function: while (_again) {
-	    desc = parent = getter = undefined;
-	    _again = false;
-	    var object = _x,
-	        property = _x2,
-	        receiver = _x3;
-	
-	    var desc = _Object$getOwnPropertyDescriptor(object, property);
-	
-	    if (desc === undefined) {
-	      var parent = Object.getPrototypeOf(object);
-	
-	      if (parent === null) {
-	        return undefined;
-	      } else {
-	        _x = parent;
-	        _x2 = property;
-	        _x3 = receiver;
-	        _again = true;
-	        continue _function;
-	      }
-	    } else if ("value" in desc) {
-	      return desc.value;
-	    } else {
-	      var getter = desc.get;
-	
-	      if (getter === undefined) {
-	        return undefined;
-	      }
-	
-	      return getter.call(receiver);
-	    }
-	  }
-	};
-	
-	exports.__esModule = true;
-
-/***/ },
-/* 47 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = { "default": __webpack_require__(63), __esModule: true };
-
-/***/ },
-/* 48 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var $ = __webpack_require__(70);
-	module.exports = function defineProperty(it, key, desc){
-	  return $.setDesc(it, key, desc);
-	};
-
-/***/ },
-/* 49 */
-/***/ function(module, exports, __webpack_require__) {
-
-	(function(exports) {
-	  exports.noop = function(){};
-	})(typeof module === 'object' && typeof module.exports === 'object' ? module.exports : window);
-
-
-/***/ },
 /* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(71), __esModule: true };
+	module.exports = { "default": __webpack_require__(73), __esModule: true };
 
 /***/ },
 /* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
+	module.exports = { "default": __webpack_require__(71), __esModule: true };
+
+/***/ },
+/* 52 */
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(72);
+	module.exports = __webpack_require__(54).core.Object.keys;
+
+/***/ },
+/* 53 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(74), __esModule: true };
+
+/***/ },
+/* 54 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	var global = typeof self != 'undefined' ? self : Function('return this')()
+	  , core   = {}
+	  , defineProperty = Object.defineProperty
+	  , hasOwnProperty = {}.hasOwnProperty
+	  , ceil  = Math.ceil
+	  , floor = Math.floor
+	  , max   = Math.max
+	  , min   = Math.min;
+	// The engine works fine with descriptors? Thank's IE8 for his funny defineProperty.
+	var DESC = !!function(){
+	  try {
+	    return defineProperty({}, 'a', {get: function(){ return 2; }}).a == 2;
+	  } catch(e){ /* empty */ }
+	}();
+	var hide = createDefiner(1);
+	// 7.1.4 ToInteger
+	function toInteger(it){
+	  return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
+	}
+	function desc(bitmap, value){
+	  return {
+	    enumerable  : !(bitmap & 1),
+	    configurable: !(bitmap & 2),
+	    writable    : !(bitmap & 4),
+	    value       : value
+	  };
+	}
+	function simpleSet(object, key, value){
+	  object[key] = value;
+	  return object;
+	}
+	function createDefiner(bitmap){
+	  return DESC ? function(object, key, value){
+	    return $.setDesc(object, key, desc(bitmap, value));
+	  } : simpleSet;
+	}
+	
+	function isObject(it){
+	  return it !== null && (typeof it == 'object' || typeof it == 'function');
+	}
+	function isFunction(it){
+	  return typeof it == 'function';
+	}
+	function assertDefined(it){
+	  if(it == undefined)throw TypeError("Can't call method on  " + it);
+	  return it;
+	}
+	
+	var $ = module.exports = __webpack_require__(75)({
+	  g: global,
+	  core: core,
+	  html: global.document && document.documentElement,
+	  // http://jsperf.com/core-js-isobject
+	  isObject:   isObject,
+	  isFunction: isFunction,
+	  it: function(it){
+	    return it;
+	  },
+	  that: function(){
+	    return this;
+	  },
+	  // 7.1.4 ToInteger
+	  toInteger: toInteger,
+	  // 7.1.15 ToLength
+	  toLength: function(it){
+	    return it > 0 ? min(toInteger(it), 0x1fffffffffffff) : 0; // pow(2, 53) - 1 == 9007199254740991
+	  },
+	  toIndex: function(index, length){
+	    index = toInteger(index);
+	    return index < 0 ? max(index + length, 0) : min(index, length);
+	  },
+	  has: function(it, key){
+	    return hasOwnProperty.call(it, key);
+	  },
+	  create:     Object.create,
+	  getProto:   Object.getPrototypeOf,
+	  DESC:       DESC,
+	  desc:       desc,
+	  getDesc:    Object.getOwnPropertyDescriptor,
+	  setDesc:    defineProperty,
+	  setDescs:   Object.defineProperties,
+	  getKeys:    Object.keys,
+	  getNames:   Object.getOwnPropertyNames,
+	  getSymbols: Object.getOwnPropertySymbols,
+	  assertDefined: assertDefined,
+	  // Dummy, fix for not array-like ES3 string in es5 module
+	  ES5Object: Object,
+	  toObject: function(it){
+	    return $.ES5Object(assertDefined(it));
+	  },
+	  hide: hide,
+	  def: createDefiner(0),
+	  set: global.Symbol ? simpleSet : hide,
+	  mix: function(target, src){
+	    for(var key in src)hide(target, key, src[key]);
+	    return target;
+	  },
+	  each: [].forEach
+	});
+	/* eslint-disable no-undef */
+	if(typeof __e != 'undefined')__e = core;
+	if(typeof __g != 'undefined')__g = global;
+
+/***/ },
+/* 55 */
+/***/ function(module, exports, __webpack_require__) {
+
 	"use strict";
 	
-	var assign = __webpack_require__(64);
+	var assign = __webpack_require__(67);
 	var ReactPropTypes = __webpack_require__(2).PropTypes;
-	var Route = __webpack_require__(38);
+	var Route = __webpack_require__(46);
 	
 	var PropTypes = assign({}, ReactPropTypes, {
 	
@@ -3136,18 +3262,18 @@ require("source-map-support").install();
 	module.exports = PropTypes;
 
 /***/ },
-/* 52 */
+/* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(72), __esModule: true };
+	module.exports = { "default": __webpack_require__(76), __esModule: true };
 
 /***/ },
-/* 53 */
+/* 57 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var _Object$defineProperties = __webpack_require__(52)["default"];
+	var _Object$defineProperties = __webpack_require__(56)["default"];
 	
 	var _Object$create = __webpack_require__(50)["default"];
 	
@@ -3206,7 +3332,7 @@ require("source-map-support").install();
 	module.exports = ContextWrapper;
 
 /***/ },
-/* 54 */
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -3236,14 +3362,14 @@ require("source-map-support").install();
 	module.exports = LocationActions;
 
 /***/ },
-/* 55 */
+/* 59 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var invariant = __webpack_require__(65);
-	var objectAssign = __webpack_require__(79);
-	var qs = __webpack_require__(80);
+	var invariant = __webpack_require__(68);
+	var objectAssign = __webpack_require__(81);
+	var qs = __webpack_require__(82);
 	
 	var paramCompileMatcher = /:([a-zA-Z_$][a-zA-Z0-9_$]*)|[*.()\[\]\\+|{}^$]/g;
 	var paramInjectMatcher = /:([a-zA-Z_$][a-zA-Z0-9_$?]*[?]?)|[*]/g;
@@ -3394,14 +3520,14 @@ require("source-map-support").install();
 	module.exports = PathUtils;
 
 /***/ },
-/* 56 */
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var invariant = __webpack_require__(65);
-	var canUseDOM = __webpack_require__(67).canUseDOM;
-	var getWindowScrollPosition = __webpack_require__(73);
+	var invariant = __webpack_require__(68);
+	var canUseDOM = __webpack_require__(69).canUseDOM;
+	var getWindowScrollPosition = __webpack_require__(77);
 	
 	function shouldUpdateScroll(state, prevState) {
 	  if (!prevState) {
@@ -3474,7 +3600,7 @@ require("source-map-support").install();
 	module.exports = ScrollHistory;
 
 /***/ },
-/* 57 */
+/* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -3492,15 +3618,15 @@ require("source-map-support").install();
 	module.exports = isReactChildren;
 
 /***/ },
-/* 58 */
+/* 62 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	/* jshint -W058 */
 	
-	var Cancellation = __webpack_require__(60);
-	var Redirect = __webpack_require__(59);
+	var Cancellation = __webpack_require__(64);
+	var Redirect = __webpack_require__(63);
 	
 	/**
 	 * Encapsulates a transition to a given path.
@@ -3572,7 +3698,7 @@ require("source-map-support").install();
 	module.exports = Transition;
 
 /***/ },
-/* 59 */
+/* 63 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -3589,7 +3715,7 @@ require("source-map-support").install();
 	module.exports = Redirect;
 
 /***/ },
-/* 60 */
+/* 64 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -3603,12 +3729,12 @@ require("source-map-support").install();
 	module.exports = Cancellation;
 
 /***/ },
-/* 61 */
+/* 65 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var _Object$defineProperties = __webpack_require__(52)["default"];
+	var _Object$defineProperties = __webpack_require__(56)["default"];
 	
 	var _createClass = (function () {
 	  function defineProperties(target, props) {
@@ -3627,7 +3753,7 @@ require("source-map-support").install();
 	};
 	
 	/* jshint -W084 */
-	var PathUtils = __webpack_require__(55);
+	var PathUtils = __webpack_require__(59);
 	
 	function deepSearch(route, pathname, query) {
 	  // Check the subtree first to find the most deeply-nested match.
@@ -3699,7 +3825,7 @@ require("source-map-support").install();
 	module.exports = Match;
 
 /***/ },
-/* 62 */
+/* 66 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -3720,14 +3846,7 @@ require("source-map-support").install();
 	module.exports = supportsHistory;
 
 /***/ },
-/* 63 */
-/***/ function(module, exports, __webpack_require__) {
-
-	__webpack_require__(75);
-	module.exports = __webpack_require__(70).core.Object.keys;
-
-/***/ },
-/* 64 */
+/* 67 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -3780,7 +3899,7 @@ require("source-map-support").install();
 
 
 /***/ },
-/* 65 */
+/* 68 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -3808,7 +3927,7 @@ require("source-map-support").install();
 	 */
 	
 	var invariant = function(condition, format, a, b, c, d, e, f) {
-	  if (true) {
+	  if (false) {
 	    if (format === undefined) {
 	      throw new Error('invariant requires an error message argument');
 	    }
@@ -3839,72 +3958,7 @@ require("source-map-support").install();
 
 
 /***/ },
-/* 66 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Copyright 2014-2015, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule warning
-	 */
-	
-	"use strict";
-	
-	var emptyFunction = __webpack_require__(74);
-	
-	/**
-	 * Similar to invariant but only logs a warning if the condition is not met.
-	 * This can be used to log issues in development environments in critical
-	 * paths. Removing the logging code for production environments will keep the
-	 * same logic and follow the same code paths.
-	 */
-	
-	var warning = emptyFunction;
-	
-	if (true) {
-	  warning = function(condition, format ) {for (var args=[],$__0=2,$__1=arguments.length;$__0<$__1;$__0++) args.push(arguments[$__0]);
-	    if (format === undefined) {
-	      throw new Error(
-	        '`warning(condition, format, ...args)` requires a warning ' +
-	        'message argument'
-	      );
-	    }
-	
-	    if (format.length < 10 || /^[s\W]*$/.test(format)) {
-	      throw new Error(
-	        'The warning format should be able to uniquely identify this ' +
-	        'warning. Please, use a more descriptive format than: ' + format
-	      );
-	    }
-	
-	    if (format.indexOf('Failed Composite propType: ') === 0) {
-	      return; // Ignore CompositeComponent proptype check.
-	    }
-	
-	    if (!condition) {
-	      var argIndex = 0;
-	      var message = 'Warning: ' + format.replace(/%s/g, function()  {return args[argIndex++];});
-	      console.warn(message);
-	      try {
-	        // --- Welcome to debugging React ---
-	        // This error was thrown as a convenience so that you can use this stack
-	        // to find the callsite that caused this warning to fire.
-	        throw new Error(message);
-	      } catch(x) {}
-	    }
-	  };
-	}
-	
-	module.exports = warning;
-
-
-/***/ },
-/* 67 */
+/* 69 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -3952,210 +4006,83 @@ require("source-map-support").install();
 
 
 /***/ },
-/* 68 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = { "default": __webpack_require__(77), __esModule: true };
-
-/***/ },
-/* 69 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = { "default": __webpack_require__(76), __esModule: true };
-
-/***/ },
 /* 70 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-	var global = typeof self != 'undefined' ? self : Function('return this')()
-	  , core   = {}
-	  , defineProperty = Object.defineProperty
-	  , hasOwnProperty = {}.hasOwnProperty
-	  , ceil  = Math.ceil
-	  , floor = Math.floor
-	  , max   = Math.max
-	  , min   = Math.min;
-	// The engine works fine with descriptors? Thank's IE8 for his funny defineProperty.
-	var DESC = !!function(){
-	  try {
-	    return defineProperty({}, 'a', {get: function(){ return 2; }}).a == 2;
-	  } catch(e){ /* empty */ }
-	}();
-	var hide = createDefiner(1);
-	// 7.1.4 ToInteger
-	function toInteger(it){
-	  return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
-	}
-	function desc(bitmap, value){
-	  return {
-	    enumerable  : !(bitmap & 1),
-	    configurable: !(bitmap & 2),
-	    writable    : !(bitmap & 4),
-	    value       : value
-	  };
-	}
-	function simpleSet(object, key, value){
-	  object[key] = value;
-	  return object;
-	}
-	function createDefiner(bitmap){
-	  return DESC ? function(object, key, value){
-	    return $.setDesc(object, key, desc(bitmap, value));
-	  } : simpleSet;
-	}
-	
-	function isObject(it){
-	  return it !== null && (typeof it == 'object' || typeof it == 'function');
-	}
-	function isFunction(it){
-	  return typeof it == 'function';
-	}
-	function assertDefined(it){
-	  if(it == undefined)throw TypeError("Can't call method on  " + it);
-	  return it;
-	}
-	
-	var $ = module.exports = __webpack_require__(78)({
-	  g: global,
-	  core: core,
-	  html: global.document && document.documentElement,
-	  // http://jsperf.com/core-js-isobject
-	  isObject:   isObject,
-	  isFunction: isFunction,
-	  it: function(it){
-	    return it;
-	  },
-	  that: function(){
-	    return this;
-	  },
-	  // 7.1.4 ToInteger
-	  toInteger: toInteger,
-	  // 7.1.15 ToLength
-	  toLength: function(it){
-	    return it > 0 ? min(toInteger(it), 0x1fffffffffffff) : 0; // pow(2, 53) - 1 == 9007199254740991
-	  },
-	  toIndex: function(index, length){
-	    index = toInteger(index);
-	    return index < 0 ? max(index + length, 0) : min(index, length);
-	  },
-	  has: function(it, key){
-	    return hasOwnProperty.call(it, key);
-	  },
-	  create:     Object.create,
-	  getProto:   Object.getPrototypeOf,
-	  DESC:       DESC,
-	  desc:       desc,
-	  getDesc:    Object.getOwnPropertyDescriptor,
-	  setDesc:    defineProperty,
-	  setDescs:   Object.defineProperties,
-	  getKeys:    Object.keys,
-	  getNames:   Object.getOwnPropertyNames,
-	  getSymbols: Object.getOwnPropertySymbols,
-	  assertDefined: assertDefined,
-	  // Dummy, fix for not array-like ES3 string in es5 module
-	  ES5Object: Object,
-	  toObject: function(it){
-	    return $.ES5Object(assertDefined(it));
-	  },
-	  hide: hide,
-	  def: createDefiner(0),
-	  set: global.Symbol ? simpleSet : hide,
-	  mix: function(target, src){
-	    for(var key in src)hide(target, key, src[key]);
-	    return target;
-	  },
-	  each: [].forEach
-	});
-	/* eslint-disable no-undef */
-	if(typeof __e != 'undefined')__e = core;
-	if(typeof __g != 'undefined')__g = global;
-
-/***/ },
-/* 71 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var $ = __webpack_require__(70);
-	module.exports = function create(P, D){
-	  return $.create(P, D);
-	};
-
-/***/ },
-/* 72 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var $ = __webpack_require__(70);
-	module.exports = function defineProperties(T, D){
-	  return $.setDescs(T, D);
-	};
-
-/***/ },
-/* 73 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var invariant = __webpack_require__(65);
-	var canUseDOM = __webpack_require__(67).canUseDOM;
-	
 	/**
-	 * Returns the current scroll position of the window as { x, y }.
-	 */
-	function getWindowScrollPosition() {
-	  invariant(canUseDOM, "Cannot get current scroll position without a DOM");
-	
-	  return {
-	    x: window.pageXOffset || document.documentElement.scrollLeft,
-	    y: window.pageYOffset || document.documentElement.scrollTop
-	  };
-	}
-	
-	module.exports = getWindowScrollPosition;
-
-/***/ },
-/* 74 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Copyright 2013-2015, Facebook, Inc.
+	 * Copyright 2014-2015, Facebook, Inc.
 	 * All rights reserved.
 	 *
 	 * This source code is licensed under the BSD-style license found in the
 	 * LICENSE file in the root directory of this source tree. An additional grant
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 *
-	 * @providesModule emptyFunction
+	 * @providesModule warning
 	 */
 	
-	function makeEmptyFunction(arg) {
-	  return function() {
-	    return arg;
+	"use strict";
+	
+	var emptyFunction = __webpack_require__(78);
+	
+	/**
+	 * Similar to invariant but only logs a warning if the condition is not met.
+	 * This can be used to log issues in development environments in critical
+	 * paths. Removing the logging code for production environments will keep the
+	 * same logic and follow the same code paths.
+	 */
+	
+	var warning = emptyFunction;
+	
+	if (false) {
+	  warning = function(condition, format ) {for (var args=[],$__0=2,$__1=arguments.length;$__0<$__1;$__0++) args.push(arguments[$__0]);
+	    if (format === undefined) {
+	      throw new Error(
+	        '`warning(condition, format, ...args)` requires a warning ' +
+	        'message argument'
+	      );
+	    }
+	
+	    if (format.length < 10 || /^[s\W]*$/.test(format)) {
+	      throw new Error(
+	        'The warning format should be able to uniquely identify this ' +
+	        'warning. Please, use a more descriptive format than: ' + format
+	      );
+	    }
+	
+	    if (format.indexOf('Failed Composite propType: ') === 0) {
+	      return; // Ignore CompositeComponent proptype check.
+	    }
+	
+	    if (!condition) {
+	      var argIndex = 0;
+	      var message = 'Warning: ' + format.replace(/%s/g, function()  {return args[argIndex++];});
+	      console.warn(message);
+	      try {
+	        // --- Welcome to debugging React ---
+	        // This error was thrown as a convenience so that you can use this stack
+	        // to find the callsite that caused this warning to fire.
+	        throw new Error(message);
+	      } catch(x) {}
+	    }
 	  };
 	}
 	
-	/**
-	 * This function accepts and discards inputs; it has no side effects. This is
-	 * primarily useful idiomatically for overridable function endpoints which
-	 * always need to be callable, since JS lacks a null-call idiom ala Cocoa.
-	 */
-	function emptyFunction() {}
-	
-	emptyFunction.thatReturns = makeEmptyFunction;
-	emptyFunction.thatReturnsFalse = makeEmptyFunction(false);
-	emptyFunction.thatReturnsTrue = makeEmptyFunction(true);
-	emptyFunction.thatReturnsNull = makeEmptyFunction(null);
-	emptyFunction.thatReturnsThis = function() { return this; };
-	emptyFunction.thatReturnsArgument = function(arg) { return arg; };
-	
-	module.exports = emptyFunction;
+	module.exports = warning;
 
 
 /***/ },
-/* 75 */
+/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var $        = __webpack_require__(70)
-	  , $def     = __webpack_require__(81)
+	__webpack_require__(79);
+	module.exports = __webpack_require__(54).core.Object.assign;
+
+/***/ },
+/* 72 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var $        = __webpack_require__(54)
+	  , $def     = __webpack_require__(80)
 	  , isObject = $.isObject
 	  , toObject = $.toObject;
 	function wrapObjectMethod(METHOD, MODE){
@@ -4194,24 +4121,26 @@ require("source-map-support").install();
 	wrapObjectMethod('getOwnPropertyNames');
 
 /***/ },
-/* 76 */
+/* 73 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var $ = __webpack_require__(70);
-	__webpack_require__(75);
+	var $ = __webpack_require__(54);
+	module.exports = function create(P, D){
+	  return $.create(P, D);
+	};
+
+/***/ },
+/* 74 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var $ = __webpack_require__(54);
+	__webpack_require__(72);
 	module.exports = function getOwnPropertyDescriptor(it, key){
 	  return $.getDesc(it, key);
 	};
 
 /***/ },
-/* 77 */
-/***/ function(module, exports, __webpack_require__) {
-
-	__webpack_require__(82);
-	module.exports = __webpack_require__(70).core.Object.assign;
-
-/***/ },
-/* 78 */
+/* 75 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function($){
@@ -4221,49 +4150,88 @@ require("source-map-support").install();
 	};
 
 /***/ },
+/* 76 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var $ = __webpack_require__(54);
+	module.exports = function defineProperties(T, D){
+	  return $.setDescs(T, D);
+	};
+
+/***/ },
+/* 77 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var invariant = __webpack_require__(68);
+	var canUseDOM = __webpack_require__(69).canUseDOM;
+	
+	/**
+	 * Returns the current scroll position of the window as { x, y }.
+	 */
+	function getWindowScrollPosition() {
+	  invariant(canUseDOM, "Cannot get current scroll position without a DOM");
+	
+	  return {
+	    x: window.pageXOffset || document.documentElement.scrollLeft,
+	    y: window.pageYOffset || document.documentElement.scrollTop
+	  };
+	}
+	
+	module.exports = getWindowScrollPosition;
+
+/***/ },
+/* 78 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright 2013-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule emptyFunction
+	 */
+	
+	function makeEmptyFunction(arg) {
+	  return function() {
+	    return arg;
+	  };
+	}
+	
+	/**
+	 * This function accepts and discards inputs; it has no side effects. This is
+	 * primarily useful idiomatically for overridable function endpoints which
+	 * always need to be callable, since JS lacks a null-call idiom ala Cocoa.
+	 */
+	function emptyFunction() {}
+	
+	emptyFunction.thatReturns = makeEmptyFunction;
+	emptyFunction.thatReturnsFalse = makeEmptyFunction(false);
+	emptyFunction.thatReturnsTrue = makeEmptyFunction(true);
+	emptyFunction.thatReturnsNull = makeEmptyFunction(null);
+	emptyFunction.thatReturnsThis = function() { return this; };
+	emptyFunction.thatReturnsArgument = function(arg) { return arg; };
+	
+	module.exports = emptyFunction;
+
+
+/***/ },
 /* 79 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-	
-	function ToObject(val) {
-		if (val == null) {
-			throw new TypeError('Object.assign cannot be called with null or undefined');
-		}
-	
-		return Object(val);
-	}
-	
-	module.exports = Object.assign || function (target, source) {
-		var from;
-		var keys;
-		var to = ToObject(target);
-	
-		for (var s = 1; s < arguments.length; s++) {
-			from = arguments[s];
-			keys = Object.keys(Object(from));
-	
-			for (var i = 0; i < keys.length; i++) {
-				to[keys[i]] = from[keys[i]];
-			}
-		}
-	
-		return to;
-	};
-
+	// 19.1.3.1 Object.assign(target, source)
+	var $def = __webpack_require__(80);
+	$def($def.S, 'Object', {assign: __webpack_require__(83)});
 
 /***/ },
 /* 80 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(83);
-
-
-/***/ },
-/* 81 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var $          = __webpack_require__(70)
+	var $          = __webpack_require__(54)
 	  , global     = $.g
 	  , core       = $.core
 	  , isFunction = $.isFunction;
@@ -4311,40 +4279,50 @@ require("source-map-support").install();
 	module.exports = $def;
 
 /***/ },
+/* 81 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	function ToObject(val) {
+		if (val == null) {
+			throw new TypeError('Object.assign cannot be called with null or undefined');
+		}
+	
+		return Object(val);
+	}
+	
+	module.exports = Object.assign || function (target, source) {
+		var from;
+		var keys;
+		var to = ToObject(target);
+	
+		for (var s = 1; s < arguments.length; s++) {
+			from = arguments[s];
+			keys = Object.keys(Object(from));
+	
+			for (var i = 0; i < keys.length; i++) {
+				to[keys[i]] = from[keys[i]];
+			}
+		}
+	
+		return to;
+	};
+
+
+/***/ },
 /* 82 */
 /***/ function(module, exports, __webpack_require__) {
 
-	// 19.1.3.1 Object.assign(target, source)
-	var $def = __webpack_require__(81);
-	$def($def.S, 'Object', {assign: __webpack_require__(84)});
+	module.exports = __webpack_require__(84);
+
 
 /***/ },
 /* 83 */
 /***/ function(module, exports, __webpack_require__) {
 
-	// Load modules
-	
-	var Stringify = __webpack_require__(85);
-	var Parse = __webpack_require__(86);
-	
-	
-	// Declare internals
-	
-	var internals = {};
-	
-	
-	module.exports = {
-	    stringify: Stringify,
-	    parse: Parse
-	};
-
-
-/***/ },
-/* 84 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var $        = __webpack_require__(70)
-	  , enumKeys = __webpack_require__(87);
+	var $        = __webpack_require__(54)
+	  , enumKeys = __webpack_require__(85);
 	// 19.1.2.1 Object.assign(target, source, ...)
 	/* eslint-disable no-unused-vars */
 	module.exports = Object.assign || function assign(target, source){
@@ -4364,7 +4342,43 @@ require("source-map-support").install();
 	};
 
 /***/ },
+/* 84 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// Load modules
+	
+	var Stringify = __webpack_require__(86);
+	var Parse = __webpack_require__(87);
+	
+	
+	// Declare internals
+	
+	var internals = {};
+	
+	
+	module.exports = {
+	    stringify: Stringify,
+	    parse: Parse
+	};
+
+
+/***/ },
 /* 85 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var $ = __webpack_require__(54);
+	module.exports = function(it){
+	  var keys       = $.getKeys(it)
+	    , getDesc    = $.getDesc
+	    , getSymbols = $.getSymbols;
+	  if(getSymbols)$.each.call(getSymbols(it), function(key){
+	    if(getDesc(it, key).enumerable)keys.push(key);
+	  });
+	  return keys;
+	};
+
+/***/ },
+/* 86 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Load modules
@@ -4467,7 +4481,7 @@ require("source-map-support").install();
 
 
 /***/ },
-/* 86 */
+/* 87 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Load modules
@@ -4632,21 +4646,6 @@ require("source-map-support").install();
 	    return Utils.compact(obj);
 	};
 
-
-/***/ },
-/* 87 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var $ = __webpack_require__(70);
-	module.exports = function(it){
-	  var keys       = $.getKeys(it)
-	    , getDesc    = $.getDesc
-	    , getSymbols = $.getSymbols;
-	  if(getSymbols)$.each.call(getSymbols(it), function(key){
-	    if(getDesc(it, key).enumerable)keys.push(key);
-	  });
-	  return keys;
-	};
 
 /***/ },
 /* 88 */
