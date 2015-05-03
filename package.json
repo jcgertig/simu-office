@@ -7,14 +7,16 @@
     "lint": "npm run eslint && npm run suit",
     "eslint": "eslint .",
     "suit": "node scripts/suit-conformance",
-    "start": "DEBUG=*,-babel node . & node server.js",
+    "start": "npm run build && node ./dist/main.js",
     "test": "jest",
+    "dev": "DEBUG=*,-babel node . & node server.js",
     "build": "node scripts/build.js"
   },
   "engines": {
     "node": ">=0.12.0"
   },
   "dependencies": {
+    "dotenv": "^1.1.0",
     "easyrtc": "^1.0.13",
     "es6-promise": "^2.1.0",
     "express": "^4.12.3",
