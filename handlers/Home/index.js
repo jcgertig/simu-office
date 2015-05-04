@@ -44,7 +44,7 @@ class Home extends React.Component {
     _.forEach(videos, (video) => {
       if (video.filled) {
         var vol = 0;
-        if (video.easyrtcid !== easyrtc.myEasyrtcid)
+        if (video.easyrtcid !== easyrtc.myEasyrtcid) {
           var p1 = {
             x: (myOrder % 4),
             y: Math.floor(myOrder)
