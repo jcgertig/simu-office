@@ -1,6 +1,40 @@
 /** @define AppBase; use strict */
 
-/** @define NotFound; use strict */
+/** @define HomeContent; use strict */
+
+.Home {
+  width: 100%;
+  height: 100%;
+}
+
+.Videos {
+  margin: 0 auto;
+  width: 98%;
+  vertical-align: middle;
+}
+
+.CameraPreview {
+  box-shadow: 4px 4px 15px 0px rgba(0,0,0,0.75);
+  width: 100%;
+  margin-right: 2%;
+  border-radius: 4px;
+  background: #000;
+}
+
+.CameraPreviewWrapper {
+  width: calc(23% - 2px);
+  height: 50vh;
+  margin-right: 2%;
+  display: inline-block;
+}
+
+.Hidden {
+  display: none;
+}
+
+.Empty {
+  border: 1px dashed #DDD;
+}/** @define NotFound; use strict */
 
 /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
 
