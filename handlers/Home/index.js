@@ -43,8 +43,20 @@ class Home extends React.Component {
     var myOrder = me ? me.order : 0;
     _.forEach(videos, (video) => {
       if (video.filled) {
-        var distance = Math.abs(myOrder - video.order) - 1;
-        var vol = (video.easyrtcid === easyrtc.myEasyrtcid)? 0 : Math.max(0, 1 - 0.33*distance);
+        var vol = 0;
+        if (video.easyrtcid !== easyrtc.myEasyrtcid)
+          var p1 = {
+            x: (myOrder % 4),
+            y: Math.floor(myOrder)
+          };
+          var p2 = {
+            x: (video.order % 4),
+            y: Math.floor(video.order)
+          };
+
+          var distance = this.distance(p1, p2) - 1;
+          vol = Math.max(0, 1 - 0.33*distance);
+        }
         this.refs[`video${video.easyrtcid}`].getDOMNode().volume = vol;
       }
     });
@@ -68,6 +80,12 @@ class Home extends React.Component {
       easyrtc.setOnHangup(this.handleHangup.bind(this));
       easyrtc.setStreamAcceptor(this.handleStream.bind(this));
     });
+  }
+
+  dustance(p1, p2): ?any {
+    var xDiff = p2.x - p1.x;
+    var yDiff = p2.y - p1.y;
+    return Math.sqrt((xDiff * xDiff) + (yDiff * yDiff));
   }
 
   newConnection(easyrtcid, slot): ?void {
